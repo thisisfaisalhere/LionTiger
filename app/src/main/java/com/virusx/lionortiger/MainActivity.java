@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.parse.ParseInstallation;
+
 public class MainActivity extends AppCompatActivity {
 
     private enum Player {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         resetBtn = findViewById(R.id.resetBtn);
         grid = findViewById(R.id.grid);
