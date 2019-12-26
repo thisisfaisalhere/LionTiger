@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button resetBtn;
     private GridLayout grid;
     private int falseCount = 0;
+    private String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(notGameOver) {
             if(notTapped[tiTag - 1]) {
-                if(falseCount != notTapped.length - 1) {
+                if(falseCount != notTapped.length - 1 ) {
                     if(currentPlayer == Player.ONE) {
                         tappedImageView.setImageResource(R.drawable.tiger);
                         tappedImageView.setTranslationX(-2000);
@@ -77,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
                         falseCount++;
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT).show();
-                    resetBtn.setVisibility(View.VISIBLE);
+                    message = "Its a Draw! Reset to Play Again";
+                    showMessage();
                 }
             } else {
                 Toast.makeText(MainActivity.this, "Choose another Grid", Toast.LENGTH_SHORT).show();
@@ -89,20 +90,23 @@ public class MainActivity extends AppCompatActivity {
                         && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
                         && playerChoices[checkWinner[0]] != Player.INPUT) {
                     if(currentPlayer == Player.TWO) {
-                        Toast.makeText(MainActivity.this, "Tiger is Our Champion", Toast.LENGTH_SHORT).show();
-                        notGameOver = false;
-                        resetBtn.setVisibility(View.VISIBLE);
+                        message = "Tiger is Our Champion";
+                        showMessage();
                     } else if(currentPlayer == Player.ONE) {
-                        Toast.makeText(MainActivity.this, "Lion is Our Champion", Toast.LENGTH_SHORT).show();
-                        notGameOver = false;
-                        resetBtn.setVisibility(View.VISIBLE);
+                        message = "Lion is Our Champion";
+                        showMessage();
                     }
                 }
             }
-
         } else {
             Toast.makeText(MainActivity.this, "Game Over. Reset to Play Again", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showMessage() {
+        Toast.makeText(MainActivity.this, message , Toast.LENGTH_SHORT).show();
+        notGameOver = false;
+        resetBtn.setVisibility(View.VISIBLE);
     }
 
     private void resetTheGame() {
