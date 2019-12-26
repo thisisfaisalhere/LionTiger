@@ -90,9 +90,25 @@ public class MainActivity extends AppCompatActivity {
                         && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
                         && playerChoices[checkWinner[0]] != Player.INPUT) {
                     if(currentPlayer == Player.TWO) {
+                        if(notTapped[tiTag - 1]) {
+                            tappedImageView.setImageResource(R.drawable.lion);
+                            tappedImageView.setTranslationX(-2000);
+                            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+                            message = "Lion is Our Champion";
+                            showMessage();
+                            break;
+                        }
                         message = "Tiger is Our Champion";
                         showMessage();
                     } else if(currentPlayer == Player.ONE) {
+                        if(notTapped[tiTag - 1]) {
+                            tappedImageView.setImageResource(R.drawable.tiger);
+                            tappedImageView.setTranslationX(2000);
+                            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                            message = "Tiger is Our Champion";
+                            showMessage();
+                            break;
+                        }
                         message = "Lion is Our Champion";
                         showMessage();
                     }
