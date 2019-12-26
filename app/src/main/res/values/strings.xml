@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lion or Tiger</string>
+    <string name="lion_or_tiger">Lion or Tiger?</string>
+    <string name="reset">Reset</string>
+</resources>
