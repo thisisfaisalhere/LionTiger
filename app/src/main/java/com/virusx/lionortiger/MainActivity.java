@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.parse.ParseInstallation;
 
+import es.dmoral.toasty.Toasty;
+
 public class MainActivity extends AppCompatActivity {
 
     private enum Player {
@@ -81,11 +83,12 @@ public class MainActivity extends AppCompatActivity {
                         falseCount++;
                     }
                 } else {
-                    message = "Its a Draw! Reset to Play Again";
-                    showMessage();
+                    Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+                    notGameOver = false;
+                    resetBtn.setVisibility(View.VISIBLE);
                 }
             } else {
-                Toast.makeText(MainActivity.this, "Choose another Grid", Toast.LENGTH_SHORT).show();
+                Toasty.warning(MainActivity.this, "Choose another Grid", Toast.LENGTH_SHORT, true).show();
             }
 
             for(int[] checkWinner : winCases) {
@@ -118,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(MainActivity.this, "Game Over. Reset to Play Again", Toast.LENGTH_SHORT).show();
+            Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again", Toast.LENGTH_SHORT, true).show();
         }
     }
 
     private void showMessage() {
-        Toast.makeText(MainActivity.this, message , Toast.LENGTH_SHORT).show();
+        Toasty.success(MainActivity.this, message, Toast.LENGTH_SHORT, true).show();
         notGameOver = false;
         resetBtn.setVisibility(View.VISIBLE);
     }
