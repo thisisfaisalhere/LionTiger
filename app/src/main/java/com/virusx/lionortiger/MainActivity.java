@@ -78,55 +78,54 @@ public class MainActivity extends AppCompatActivity {
         playerChoices[tiTag - 1] = currentPlayer;
 
         //conditional statements for the game
-        if(notGameOver) {                                                                              // is game is over?
-            if(notTapped[tiTag - 1]) {                                                                 // is the tapped grid is tapped before?
-                if(falseCount != notTapped.length - 1 ) {                                              // is false count is less than 8?
-                    if(currentPlayer == Player.ONE) {
-                        tappedImageView.setImageResource(R.drawable.tiger);
-                        tappedImageView.setTranslationX(-2000);
-                        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
-                        currentPlayer = Player.TWO;
-                        notTapped[tiTag - 1] = false;
-                        falseCount++;
-                    } else if(currentPlayer == Player.TWO) {
-                        tappedImageView.setImageResource(R.drawable.lion);
-                        tappedImageView.setTranslationX(2000);
-                        tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                        currentPlayer = Player.ONE;
-                        notTapped[tiTag - 1] = false;
-                        falseCount++;
-                    }
+        if(notGameOver) {
+            if(notTapped[tiTag - 1]) {
+                if(falseCount != notTapped.length - 1 ) {
+                    setImage();
                 } else if (falseCount == 8) {
                     checkWinner();
                     if (flag) {
-                        if(currentPlayer == Player.ONE) {
-                            tappedImageView.setImageResource(R.drawable.tiger);
-                            tappedImageView.setTranslationX(-2000);
-                            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
-                        } else if(currentPlayer == Player.TWO) {
-                            tappedImageView.setImageResource(R.drawable.lion);
-                            tappedImageView.setTranslationX(2000);
-                            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                        }
-                        Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+                        setImage();
+                        Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again",
+                                Toast.LENGTH_SHORT, true).show();
                         notGameOver = false;
                         resetBtn.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
-                    Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+                    Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again",
+                            Toast.LENGTH_SHORT, true).show();
                     notGameOver = false;
                     resetBtn.setVisibility(View.VISIBLE);
                 }
             } else {
-                Toasty.warning(MainActivity.this, "Choose another Grid", Toast.LENGTH_SHORT, true).show();
+                Toasty.warning(MainActivity.this, "Choose another Grid",
+                        Toast.LENGTH_SHORT, true).show();
             }
 
             //iterating through the win cases array to find the winner
             checkWinner();
         } else {
-            Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+            Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again",
+                    Toast.LENGTH_SHORT, true).show();
         }
+    }
+    //this is a function to set image
+    private void setImage() {
+        if(currentPlayer == Player.ONE) {
+            tappedImageView.setImageResource(R.drawable.tiger);
+            tappedImageView.setTranslationX(-2000);
+            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+            currentPlayer = Player.TWO;
+
+        } else if(currentPlayer == Player.TWO) {
+            tappedImageView.setImageResource(R.drawable.lion);
+            tappedImageView.setTranslationX(2000);
+            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
+            currentPlayer = Player.ONE;
+        }
+        notTapped[tiTag - 1] = false;
+        falseCount++;
     }
 
     private void checkWinner() {
