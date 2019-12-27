@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
             {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
              {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
              {0, 4, 8}, {2, 4, 6}};
+
     //some variables to check the flow of the game
     private boolean[] notTapped =
             {true, true, true,
@@ -31,10 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean notGameOver = true;
     private int falseCount = 0;
     private String message;
+    private boolean flag = true;
+    private int tiTag;
 
     //UI components
     private Button resetBtn;
     private GridLayout grid;
+    private ImageView tappedImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tappedOnImgGrid(View imageView) {
-        ImageView tappedImageView = (ImageView) imageView;
+        tappedImageView = (ImageView) imageView;
 
         /*tiTag or textImageTag is a variable to store the
             tag value to each grid. Tag value is starting from 1 and
             ends with 9 so the 1 is subtracted
          */
-        int tiTag = Integer.parseInt(tappedImageView.getTag().toString());
+        tiTag = Integer.parseInt(tappedImageView.getTag().toString());
         playerChoices[tiTag - 1] = currentPlayer;
 
         //conditional statements for the game
@@ -92,7 +96,24 @@ public class MainActivity extends AppCompatActivity {
                         notTapped[tiTag - 1] = false;
                         falseCount++;
                     }
-                } else {
+                } else if (falseCount == 8) {
+                    checkWinner();
+                    if (flag) {
+                        if(currentPlayer == Player.ONE) {
+                            tappedImageView.setImageResource(R.drawable.tiger);
+                            tappedImageView.setTranslationX(-2000);
+                            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+                        } else if(currentPlayer == Player.TWO) {
+                            tappedImageView.setImageResource(R.drawable.lion);
+                            tappedImageView.setTranslationX(2000);
+                            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                        }
+                        Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+                        notGameOver = false;
+                        resetBtn.setVisibility(View.VISIBLE);
+                    }
+                }
+                else {
                     Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again", Toast.LENGTH_SHORT, true).show();
                     notGameOver = false;
                     resetBtn.setVisibility(View.VISIBLE);
@@ -102,37 +123,44 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //iterating through the win cases array to find the winner
-            for(int[] checkWinner : winCases) {
-                if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
-                        && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
-                        && playerChoices[checkWinner[0]] != Player.INPUT) {
-                    if(currentPlayer == Player.TWO) {
-                        if(notTapped[tiTag - 1]) {
-                            tappedImageView.setImageResource(R.drawable.lion);
-                            tappedImageView.setTranslationX(-2000);
-                            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
-                            message = "Lion is Our Champion";
-                            showMessage();
-                            break;
-                        }
-                        message = "Tiger is Our Champion";
-                        showMessage();
-                    } else if(currentPlayer == Player.ONE) {
-                        if(notTapped[tiTag - 1]) {
-                            tappedImageView.setImageResource(R.drawable.tiger);
-                            tappedImageView.setTranslationX(2000);
-                            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                            message = "Tiger is Our Champion";
-                            showMessage();
-                            break;
-                        }
-                        message = "Lion is Our Champion";
-                        showMessage();
-                    }
-                }
-            }
+            checkWinner();
         } else {
             Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again", Toast.LENGTH_SHORT, true).show();
+        }
+    }
+
+    private void checkWinner() {
+        for(int[] checkWinner : winCases) {
+            if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
+                    && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
+                    && playerChoices[checkWinner[0]] != Player.INPUT) {
+                if(currentPlayer == Player.TWO) {
+                    if(notTapped[tiTag - 1]) {
+                        tappedImageView.setImageResource(R.drawable.lion);
+                        tappedImageView.setTranslationX(-2000);
+                        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+                        message = "Lion is Our Champion";
+                        showMessage();
+                        flag = false;
+                        break;
+                    }
+                    message = "Tiger is Our Champion";
+                    showMessage();
+                } else if(currentPlayer == Player.ONE) {
+                    if(notTapped[tiTag - 1]) {
+                        tappedImageView.setImageResource(R.drawable.tiger);
+                        tappedImageView.setTranslationX(2000);
+                        tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                        message = "Tiger is Our Champion";
+                        showMessage();
+                        flag = false;
+                        break;
+                    }
+                    message = "Lion is Our Champion";
+                    showMessage();
+                    flag = false;
+                }
+            }
         }
     }
 
@@ -152,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
             playerChoices[i] = Player.INPUT;
             notTapped[i] = true;
         }
+        flag = true;
         falseCount = 0;
         resetBtn.setVisibility(View.GONE);
         notGameOver = true;

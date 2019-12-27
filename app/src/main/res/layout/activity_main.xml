@@ -224,6 +224,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
         android:text="@string/lion_or_tiger"
+        android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -238,8 +239,10 @@
         android:text="@string/reset"
         android:textColor="#F0FCCB"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grid" />
+        app:layout_constraintTop_toBottomOf="@+id/grid"
+        app:layout_constraintVertical_bias="0.043" />
 </androidx.constraintlayout.widget.ConstraintLayout>
