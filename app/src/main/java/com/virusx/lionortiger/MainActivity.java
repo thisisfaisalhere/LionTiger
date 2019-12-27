@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.parse.ParseInstallation;
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
              {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
              {0, 4, 8}, {2, 4, 6}};
+    private Player icon;
 
     //some variables to check the flow of the game
     private boolean[] notTapped =
@@ -31,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
             true, true, true};
     private boolean notGameOver = true;
     private int falseCount = 0;
-    private String message;
     private boolean flag = true;
     private int tiTag;
 
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
             tappedImageView.setTranslationX(-2000);
             tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
             currentPlayer = Player.TWO;
-
         } else if(currentPlayer == Player.TWO) {
             tappedImageView.setImageResource(R.drawable.lion);
             tappedImageView.setTranslationX(2000);
@@ -135,27 +136,23 @@ public class MainActivity extends AppCompatActivity {
                     && playerChoices[checkWinner[0]] != Player.INPUT) {
                 if(currentPlayer == Player.TWO) {
                     if(notTapped[tiTag - 1]) {
-                        tappedImageView.setImageResource(R.drawable.lion);
-                        tappedImageView.setTranslationX(-2000);
-                        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
-                        message = "Lion is Our Champion";
+                        setImage();
+                        icon = Player.TWO;
                         showMessage();
                         flag = false;
                         break;
                     }
-                    message = "Tiger is Our Champion";
+                    icon = Player.TWO;
                     showMessage();
                 } else if(currentPlayer == Player.ONE) {
                     if(notTapped[tiTag - 1]) {
-                        tappedImageView.setImageResource(R.drawable.tiger);
-                        tappedImageView.setTranslationX(2000);
-                        tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                        message = "Tiger is Our Champion";
+                        setImage();
+                        icon = Player.ONE;
                         showMessage();
                         flag = false;
                         break;
                     }
-                    message = "Lion is Our Champion";
+                    icon = Player.ONE;
                     showMessage();
                     flag = false;
                 }
@@ -165,7 +162,12 @@ public class MainActivity extends AppCompatActivity {
 
     //refactored code to show toast message
     private void showMessage() {
-        Toasty.success(MainActivity.this, message, Toast.LENGTH_SHORT, true).show();
+        final String message = "is our Champion";
+        if (icon == Player.ONE) {
+            FancyToast.makeText(this, message, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.lion, false).show();
+        } else if (icon == Player.TWO) {
+            FancyToast.makeText(this, message, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.tiger, false).show();
+        }
         notGameOver = false;
         resetBtn.setVisibility(View.VISIBLE);
     }
