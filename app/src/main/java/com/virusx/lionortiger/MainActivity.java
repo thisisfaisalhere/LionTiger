@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 import com.parse.ParseInstallation;
 import com.shashank.sony.fancytoastlib.FancyToast;
-
-import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,41 +74,41 @@ public class MainActivity extends AppCompatActivity {
             ends with 9 so the 1 is subtracted
          */
         tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-        playerChoices[tiTag - 1] = currentPlayer;
-
         //conditional statements for the game
         if(notGameOver) {
             if(notTapped[tiTag - 1]) {
+                playerChoices[tiTag - 1] = currentPlayer;
                 if(falseCount != notTapped.length - 1 ) {
                     setImage();
                 } else if (falseCount == 8) {
                     checkWinner();
                     if (flag) {
                         setImage();
-                        Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again",
-                                Toast.LENGTH_SHORT, true).show();
+                        FancyToast.makeText(MainActivity.this,"Its a Draw! Reset to Play Again",
+                                FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
                         notGameOver = false;
                         resetBtn.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
-                    Toasty.info(MainActivity.this, "Its a Draw! Reset to Play Again",
-                            Toast.LENGTH_SHORT, true).show();
+                    FancyToast.makeText(MainActivity.this,"Its a Draw! Reset to Play Again",
+                            FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
                     notGameOver = false;
                     resetBtn.setVisibility(View.VISIBLE);
                 }
             } else {
-                Toasty.warning(MainActivity.this, "Choose another Grid",
-                        Toast.LENGTH_SHORT, true).show();
+                FancyToast.makeText(MainActivity.this, "Choose another Grid",
+                        FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
             }
 
             //iterating through the win cases array to find the winner
             checkWinner();
         } else {
-            Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again",
-                    Toast.LENGTH_SHORT, true).show();
+            FancyToast.makeText(MainActivity.this, "Game Over. Reset to Play Again",
+                    FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
         }
     }
+
     //this is a function to set image
     private void setImage() {
         if(currentPlayer == Player.ONE) {
@@ -129,10 +126,13 @@ public class MainActivity extends AppCompatActivity {
         falseCount++;
     }
 
+    //this is a function to check winner
+
     private void checkWinner() {
         for(int[] checkWinner : winCases) {
             if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
                     && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
+                    && playerChoices[checkWinner[2]] == playerChoices[checkWinner[0]]
                     && playerChoices[checkWinner[0]] != Player.INPUT) {
                 if(currentPlayer == Player.TWO) {
                     if(notTapped[tiTag - 1]) {
@@ -164,9 +164,11 @@ public class MainActivity extends AppCompatActivity {
     private void showMessage() {
         final String message = "is our Champion";
         if (icon == Player.ONE) {
-            FancyToast.makeText(this, message, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.lion, false).show();
+            FancyToast.makeText(MainActivity.this, message, FancyToast.LENGTH_LONG,
+                    FancyToast.SUCCESS, R.drawable.lion, false).show();
         } else if (icon == Player.TWO) {
-            FancyToast.makeText(this, message, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, R.drawable.tiger, false).show();
+            FancyToast.makeText(MainActivity.this, message, FancyToast.LENGTH_LONG,
+                    FancyToast.SUCCESS, R.drawable.tiger, false).show();
         }
         notGameOver = false;
         resetBtn.setVisibility(View.VISIBLE);
