@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.parse.ParseInstallation;
-import com.shashank.sony.fancytoastlib.FancyToast;
+import es.dmoral.toasty.Toasty;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,28 +86,26 @@ public class MainActivity extends AppCompatActivity {
                     checkWinner();
                     if (flag) {
                         setImage();
-                        FancyToast.makeText(MainActivity.this,"Its a Draw! Reset to Play Again",
-                                FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
+                        drawDialog();
                         notGameOver = false;
                         resetBtn.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
-                    FancyToast.makeText(MainActivity.this,"Its a Draw! Reset to Play Again",
-                            FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
+                    drawDialog();
                     notGameOver = false;
                     resetBtn.setVisibility(View.VISIBLE);
                 }
             } else {
-                FancyToast.makeText(MainActivity.this, "Choose another Grid",
-                        FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
+                Toasty.info(MainActivity.this, "Choose another Grid",
+                        Toasty.LENGTH_SHORT, true).show();
             }
 
             //iterating through the win cases array to find the winner
             checkWinner();
         } else {
-            FancyToast.makeText(MainActivity.this, "Game Over. Reset to Play Again",
-                    FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
+            Toasty.warning(MainActivity.this, "Game Over. Reset to Play Again",
+                    Toasty.LENGTH_SHORT, true).show();
         }
     }
 
@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //this is a function to check winner
-
     private void checkWinner() {
         for(int[] checkWinner : winCases) {
             if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
@@ -162,16 +161,53 @@ public class MainActivity extends AppCompatActivity {
 
     //refactored code to show toast message
     private void showMessage() {
-        final String message = "is our Champion";
+        final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
         if (icon == Player.ONE) {
-            FancyToast.makeText(MainActivity.this, message, FancyToast.LENGTH_LONG,
-                    FancyToast.SUCCESS, R.drawable.lion, false).show();
+            prettyDialog.setIcon(R.drawable.lion).setTitle("Lion is our Champion").addButton(
+                    "Rest Game",
+                    R.color.pdlg_color_white,  // button text color
+                    R.color.pdlg_color_green,  // button background color
+                    new PrettyDialogCallback() {  // button OnClick listener
+                        @Override
+                        public void onClick() {
+                            resetTheGame();
+                            prettyDialog.dismiss();
+                        }
+                    }
+            ).show();
         } else if (icon == Player.TWO) {
-            FancyToast.makeText(MainActivity.this, message, FancyToast.LENGTH_LONG,
-                    FancyToast.SUCCESS, R.drawable.tiger, false).show();
+            prettyDialog.setIcon(R.drawable.tiger).setTitle("Tiger is our Champion").addButton(
+                    "Rest Game",
+                    R.color.pdlg_color_white,  // button text color
+                    R.color.pdlg_color_green,  // button background color
+                    new PrettyDialogCallback() {  // button OnClick listener
+                        @Override
+                        public void onClick() {
+                            resetTheGame();
+                            prettyDialog.dismiss();
+                        }
+                    }
+            ).show();
         }
         notGameOver = false;
         resetBtn.setVisibility(View.VISIBLE);
+    }
+
+    //for draw dialog
+    private void drawDialog() {
+        final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
+        prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again").addButton(
+                "Rest Game",
+                R.color.pdlg_color_white,  // button text color
+                R.color.pdlg_color_green,  // button background color
+                new PrettyDialogCallback() {  // button OnClick listener
+                    @Override
+                    public void onClick() {
+                        resetTheGame();
+                        prettyDialog.dismiss();
+                    }
+                }
+        ).show();
     }
 
     // reset game function to reset all the variables
