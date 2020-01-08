@@ -22,19 +22,21 @@ public class MainActivity extends AppCompatActivity {
     //declared win cases
     private int[][] winCases =
             {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-             {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-             {0, 4, 8}, {2, 4, 6}};
-    private Player icon;
+                    {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+                    {0, 4, 8}, {2, 4, 6}};
 
     //some variables to check the flow of the game
     private boolean[] notTapped =
             {true, true, true,
-            true, true, true,
-            true, true, true};
-    private boolean notGameOver = true;
+                    true, true, true,
+                    true, true, true};
+    private boolean GameOver = false;
     private int falseCount = 0;
     private boolean flag = true;
+    private boolean showed = false;
     private int tiTag;
+    private int icon;
+    private String message;
 
     //UI components
     private Button resetBtn;
@@ -75,32 +77,30 @@ public class MainActivity extends AppCompatActivity {
             tag value to each grid. Tag value is starting from 1 and
             ends with 9 so the 1 is subtracted
          */
-        tiTag = Integer.parseInt(tappedImageView.getTag().toString());
         //conditional statements for the game
-        if(notGameOver) {
+        if(!GameOver) {
+            tiTag = Integer.parseInt(tappedImageView.getTag().toString());
             if(notTapped[tiTag - 1]) {
                 playerChoices[tiTag - 1] = currentPlayer;
-                if(falseCount != notTapped.length - 1 ) {
+                if(falseCount != notTapped.length - 1 )
                     setImage();
-                } else if (falseCount == 8) {
+                else if (falseCount == 8) {
                     checkWinner();
                     if (flag) {
                         setImage();
                         drawDialog();
-                        notGameOver = false;
+                        GameOver = true;
                         resetBtn.setVisibility(View.VISIBLE);
                     }
-                }
-                else {
+                } else {
                     drawDialog();
-                    notGameOver = false;
+                    GameOver = true;
                     resetBtn.setVisibility(View.VISIBLE);
                 }
             } else {
                 Toasty.info(MainActivity.this, "Choose another Grid",
                         Toasty.LENGTH_SHORT, true).show();
             }
-
             //iterating through the win cases array to find the winner
             checkWinner();
         } else {
@@ -136,78 +136,67 @@ public class MainActivity extends AppCompatActivity {
                 if(currentPlayer == Player.TWO) {
                     if(notTapped[tiTag - 1]) {
                         setImage();
-                        icon = Player.TWO;
-                        showMessage();
                         flag = false;
+                        message = "Lion";
+                        showMessage();
                         break;
                     }
-                    icon = Player.TWO;
-                    showMessage();
-                } else if(currentPlayer == Player.ONE) {
+                    flag = false;
+                    message = "Tiger";
+                } else {
                     if(notTapped[tiTag - 1]) {
                         setImage();
-                        icon = Player.ONE;
-                        showMessage();
                         flag = false;
+                        message = "Tiger";
+                        showMessage();
                         break;
                     }
-                    icon = Player.ONE;
-                    showMessage();
                     flag = false;
+                    message = "Lion";
                 }
+                showMessage();
+                break;
             }
         }
     }
 
     //refactored code to show toast message
     private void showMessage() {
-        final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
-        if (icon == Player.ONE) {
-            prettyDialog.setIcon(R.drawable.lion).setTitle("Lion is our Champion").addButton(
-                    "Rest Game",
-                    R.color.pdlg_color_white,  // button text color
-                    R.color.pdlg_color_green,  // button background color
-                    new PrettyDialogCallback() {  // button OnClick listener
-                        @Override
-                        public void onClick() {
-                            resetTheGame();
-                            prettyDialog.dismiss();
-                        }
-                    }
-            ).show();
-        } else if (icon == Player.TWO) {
-            prettyDialog.setIcon(R.drawable.tiger).setTitle("Tiger is our Champion").addButton(
-                    "Rest Game",
-                    R.color.pdlg_color_white,  // button text color
-                    R.color.pdlg_color_green,  // button background color
-                    new PrettyDialogCallback() {  // button OnClick listener
-                        @Override
-                        public void onClick() {
-                            resetTheGame();
-                            prettyDialog.dismiss();
-                        }
-                    }
-            ).show();
+        if(!showed) {
+            final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
+            prettyDialog.setIcon(icon).setTitle(message + " is our Winner")
+                    .addButton("Rest Game",
+                            R.color.pdlg_color_white,  // button text color
+                            R.color.pdlg_color_green,  // button background color
+                            new PrettyDialogCallback() {  // button OnClick listener
+                                @Override
+                                public void onClick() {
+                                    resetTheGame();
+                                    prettyDialog.dismiss();
+                                }
+                            }
+                    ).show();
+            GameOver = true;
+            resetBtn.setVisibility(View.VISIBLE);
+            showed = true;
         }
-        notGameOver = false;
-        resetBtn.setVisibility(View.VISIBLE);
     }
 
     //for draw dialog
     private void drawDialog() {
         final PrettyDialog prettyDialog = new PrettyDialog(MainActivity.this);
-        prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again").addButton(
-                "Rest Game",
-                R.color.pdlg_color_white,  // button text color
-                R.color.pdlg_color_green,  // button background color
-                new PrettyDialogCallback() {  // button OnClick listener
-                    @Override
-                    public void onClick() {
-                        resetTheGame();
-                        prettyDialog.dismiss();
-                    }
-                }
-        ).show();
+        prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again")
+                .addButton("Rest Game",
+                        R.color.pdlg_color_white,  // button text color
+                        R.color.pdlg_color_green,  // button background color
+                        new PrettyDialogCallback() {  // button OnClick listener
+                            @Override
+                            public void onClick() {
+                                resetTheGame();
+                                prettyDialog.dismiss();
+                            }
+                        }
+                ).show();
     }
 
     // reset game function to reset all the variables
@@ -222,7 +211,8 @@ public class MainActivity extends AppCompatActivity {
         flag = true;
         falseCount = 0;
         resetBtn.setVisibility(View.GONE);
-        notGameOver = true;
+        GameOver = false;
+        showed = false;
         currentPlayer = Player.ONE;
     }
 }
