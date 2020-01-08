@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="Choose"
+        android:text="@string/choose"
         android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,6 +32,7 @@
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/lion_or_tiger"
             app:layout_column="0"
             app:layout_row="0"
             app:srcCompat="@drawable/tiger" />
@@ -42,7 +43,8 @@
             android:layout_height="100dp"
             app:layout_column="1"
             app:layout_row="0"
-            app:srcCompat="@drawable/vs" />
+            app:srcCompat="@drawable/vs"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -50,7 +52,8 @@
             android:layout_height="wrap_content"
             app:layout_column="2"
             app:layout_row="0"
-            app:srcCompat="@drawable/lion" />
+            app:srcCompat="@drawable/lion"
+            android:contentDescription="TODO" />
     </androidx.gridlayout.widget.GridLayout>
 
     <TextView
@@ -58,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="OR"
+        android:text="@string/or"
         android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +84,8 @@
             android:layout_height="match_parent"
             app:layout_column="2"
             app:layout_row="0"
-            app:srcCompat="@drawable/android" />
+            app:srcCompat="@drawable/android"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -89,7 +93,8 @@
             android:layout_height="100dp"
             app:layout_column="1"
             app:layout_row="0"
-            app:srcCompat="@drawable/vs" />
+            app:srcCompat="@drawable/vs"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -97,6 +102,7 @@
             android:layout_height="wrap_content"
             app:layout_column="0"
             app:layout_row="0"
-            app:srcCompat="@drawable/tiger" />
+            app:srcCompat="@drawable/tiger"
+            android:contentDescription="TODO" />
     </androidx.gridlayout.widget.GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
