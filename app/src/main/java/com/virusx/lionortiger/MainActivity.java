@@ -110,18 +110,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //this is a function to set image
+
     private void setImage() {
+        int translationValue = 0;
+        int translationXByValue = 0;
         if(currentPlayer == Player.ONE) {
-            tappedImageView.setImageResource(R.drawable.tiger);
-            tappedImageView.setTranslationX(-2000);
-            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+            icon = R.drawable.tiger;
             currentPlayer = Player.TWO;
+            translationValue = -2000;
+            translationXByValue = 2000;
         } else if(currentPlayer == Player.TWO) {
-            tappedImageView.setImageResource(R.drawable.lion);
-            tappedImageView.setTranslationX(2000);
-            tappedImageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
+            icon = R.drawable.lion;
             currentPlayer = Player.ONE;
+            translationValue = 2000;
+            translationXByValue = -2000;
         }
+        tappedImageView.setImageResource(icon);
+        tappedImageView.setTranslationX(translationValue);
+        tappedImageView.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
         notTapped[tiTag - 1] = false;
         falseCount++;
     }
