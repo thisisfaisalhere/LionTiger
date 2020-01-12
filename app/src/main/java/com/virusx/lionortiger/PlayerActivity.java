@@ -52,8 +52,8 @@ public class PlayerActivity extends AppCompatActivity {
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         //initializing UI components
-        resetBtn = findViewById(R.id.resetBtn);
-        grid = findViewById(R.id.grid);
+        resetBtn = findViewById(R.id.resetBtnAndroid);
+        grid = findViewById(R.id.gridAndoird);
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
@@ -112,18 +112,21 @@ public class PlayerActivity extends AppCompatActivity {
     //this is a function to set image
     private void setImage() {
         int translationValue = 0;
+        int translationXByValue = 0;
         if(currentPlayer == Player.ONE) {
             icon = R.drawable.tiger;
             currentPlayer = Player.TWO;
-            translationValue = 2000;
+            translationValue = -2000;
+            translationXByValue = 2000;
         } else if(currentPlayer == Player.TWO) {
             icon = R.drawable.lion;
             currentPlayer = Player.ONE;
-            translationValue = -2000;
+            translationValue = 2000;
+            translationXByValue = -2000;
         }
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(translationValue);
-        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+        tappedImageView.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
         notTapped[tiTag - 1] = false;
         falseCount++;
     }

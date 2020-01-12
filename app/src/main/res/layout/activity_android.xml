@@ -8,7 +8,7 @@
     tools:context=".PlayerActivity">
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/grid"
+        android:id="@+id/gridAndoird"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#CDDC39"
@@ -223,7 +223,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="76dp"
-        android:text="@string/lion_or_tiger"
+        android:text="Tiger or Android?"
         android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -231,7 +231,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/resetBtn"
+        android:id="@+id/resetBtnAndroid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -243,6 +243,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grid"
+        app:layout_constraintTop_toBottomOf="@+id/gridAndoird"
         app:layout_constraintVertical_bias="0.043" />
 </androidx.constraintlayout.widget.ConstraintLayout>

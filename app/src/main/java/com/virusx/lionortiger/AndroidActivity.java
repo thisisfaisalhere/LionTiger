@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-
 import com.parse.ParseInstallation;
 import java.util.Random;
 import es.dmoral.toasty.Toasty;
@@ -50,14 +49,14 @@ public class AndroidActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player);
+        setContentView(R.layout.activity_android);
 
         //setting up parse server
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         //initializing UI components
-        resetBtn = findViewById(R.id.resetBtn);
-        grid = findViewById(R.id.grid);
+        resetBtn = findViewById(R.id.resetBtnAndroid);
+        grid = findViewById(R.id.gridAndoird);
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
@@ -76,33 +75,26 @@ public class AndroidActivity extends AppCompatActivity {
 
     public void tappedOnImgGrid(View imageView) {
         tappedImageView = (ImageView) imageView;
-
-        /*tiTag or textImageTag is a variable to store the
-            tag value to each grid. Tag value is starting from 1 and
-            ends with 9 so the 1 is subtracted
-         */
         //conditional statements for the game
         if(!GameOver) {
             tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-            if (notTapped[tiTag - 1]) {
-                 if(currentPlayer == Player.ONE){
-                    playerChoices[tiTag - 1] = currentPlayer;
-                    if (falseCount != notTapped.length - 1)
+            if(notTapped[tiTag - 1]) {
+                playerChoices[tiTag - 1] = currentPlayer;
+                if(falseCount != notTapped.length - 1 )
+                    setImage();
+                else if (falseCount == 8) {
+                    checkWinner();
+                    if (flag) {
                         setImage();
-                    else if (falseCount == 8) {
-                        checkWinner();
-                        if (flag) {
-                            setImage();
-                            drawDialog();
-                            GameOver = true;
-                            resetBtn.setVisibility(View.VISIBLE);
-                        }
-                    } else {
                         drawDialog();
                         GameOver = true;
                         resetBtn.setVisibility(View.VISIBLE);
                     }
-                } else androidPlays();
+                } else {
+                    drawDialog();
+                    GameOver = true;
+                    resetBtn.setVisibility(View.VISIBLE);
+                }
             } else {
                 Toasty.info(AndroidActivity.this, "Choose another Grid",
                         Toasty.LENGTH_SHORT, true).show();
@@ -116,25 +108,20 @@ public class AndroidActivity extends AppCompatActivity {
     }
 
     private void androidPlays() {
-        tiTag = getRandomNo();
-        if (notTapped[tiTag - 1]) {
-            playerChoices[tiTag - 1] = currentPlayer;
-            if (falseCount != notTapped.length - 1)
+        if(!GameOver) {
+            tiTag = getRandomNo();
+            Log.i("tag3", "getRandomNo() called");
+            if(notTapped[tiTag]) {
+                Log.i("tag", "randomNo generated is: " + tiTag);
+                playerChoices[tiTag] = currentPlayer;
                 setImage();
-            else if (falseCount == 8) {
-                checkWinner();
-                if (flag) {
-                    setImage();
-                    drawDialog();
-                    GameOver = true;
-                    resetBtn.setVisibility(View.VISIBLE);
-                }
-            } else {
-                drawDialog();
-                GameOver = true;
-                resetBtn.setVisibility(View.VISIBLE);
-            }
-        } else androidPlays();
+            } else androidPlays();
+            //iterating through the win cases array to find the winner
+            checkWinner();
+        } else {
+            Toasty.warning(AndroidActivity.this, "Game Over. Reset to Play Again",
+                    Toasty.LENGTH_SHORT, true).show();
+        }
     }
 
     private int getRandomNo() {
@@ -146,21 +133,26 @@ public class AndroidActivity extends AppCompatActivity {
     private void setImage() {
         if(currentPlayer == Player.ONE) {
             icon = R.drawable.tiger;
-            currentPlayer = Player.TWO;
             tappedImageView.setImageResource(icon);
             tappedImageView.setTranslationX(-2000);
             tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+            notTapped[tiTag - 1] = false;
+            currentPlayer = Player.TWO;
+            Log.i("tag2", "androidPlay() called");
+            androidPlays();
         } else if(currentPlayer == Player.TWO) {
+            Log.i("tag4", "setImage() called for android");
             icon = R.drawable.android;
+            ImageView setAndroidImage = new ImageView(AndroidActivity.this);
+
+            setAndroidImage.setImageResource(icon);
+            grid.addView(setAndroidImage, tiTag);
+            setAndroidImage.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            setAndroidImage.setTranslationX(2000);
+            setAndroidImage.animate().translationXBy(-2000).alpha(1).setDuration(500);
             currentPlayer = Player.ONE;
-            ImageView imageView = new ImageView(AndroidActivity.this);
-            imageView.setImageResource(R.drawable.android);
-            grid.addView(imageView, tiTag);
-            //imageView.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
-            imageView.setTranslationX(2000);
-            imageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+            notTapped[tiTag] = false;
         }
-        notTapped[tiTag - 1] = false;
         falseCount++;
     }
 
@@ -175,7 +167,7 @@ public class AndroidActivity extends AppCompatActivity {
                     if(notTapped[tiTag - 1]) {
                         setImage();
                         flag = false;
-                        message = "Lion";
+                        message = "android";
                         showMessage();
                         break;
                     }
@@ -190,7 +182,7 @@ public class AndroidActivity extends AppCompatActivity {
                         break;
                     }
                     flag = false;
-                    message = "Lion";
+                    message = "android";
                 }
                 showMessage();
                 break;
@@ -198,7 +190,6 @@ public class AndroidActivity extends AppCompatActivity {
         }
     }
 
-    //refactored code to show toast message
     //refactored code to show toast message
     private void showMessage() {
         if(!showed) {
@@ -224,18 +215,18 @@ public class AndroidActivity extends AppCompatActivity {
     //for draw dialog
     private void drawDialog() {
         final PrettyDialog prettyDialog = new PrettyDialog(AndroidActivity.this);
-        prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again").addButton(
-                "Rest Game",
-                R.color.pdlg_color_white,  // button text color
-                R.color.pdlg_color_green,  // button background color
-                new PrettyDialogCallback() {  // button OnClick listener
-                    @Override
-                    public void onClick() {
-                        resetTheGame();
-                        prettyDialog.dismiss();
-                    }
-                }
-        ).show();
+        prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again")
+                .addButton("Rest Game",
+                        R.color.pdlg_color_white,  // button text color
+                        R.color.pdlg_color_green,  // button background color
+                        new PrettyDialogCallback() {  // button OnClick listener
+                            @Override
+                            public void onClick() {
+                                resetTheGame();
+                                prettyDialog.dismiss();
+                            }
+                        }
+                ).show();
     }
 
     // reset game function to reset all the variables
