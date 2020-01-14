@@ -119,7 +119,7 @@ public class AndroidActivity extends AppCompatActivity {
                 tiTag = i;
                 Log.i("tag", "randomNo generated is: " + tiTag);
                 playerChoices[tiTag] = currentPlayer;
-                setAndroidImg(i);
+                setAndroidImg();
             } else androidPlays();
             //iterating through the win cases array to find the winner
             checkWinner();
@@ -139,6 +139,7 @@ public class AndroidActivity extends AppCompatActivity {
         tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
         notTapped[tiTag] = false;
         currentPlayer = Player.TWO;
+        falseCount++;
         Log.i("tag2", "androidPlay() called");
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -147,23 +148,120 @@ public class AndroidActivity extends AppCompatActivity {
                 androidPlays();
             }
         }, 1000);
-        falseCount++;
     }
 
-    private void setAndroidImg(int i) {
-        Log.i("tag4", "setImage() called for android");
+    private void setAndroidImg() {
         icon = R.drawable.android;
-        ImageView setAndroidImage = new ImageView(AndroidActivity.this);
-        setAndroidImage.setImageResource(icon);
-        gridLayout.setUseDefaultMargins(true);
-        setAndroidImage.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
-        setAndroidImage.setTranslationX(2000);
-        setAndroidImage.animate().translationXBy(-2000).alpha(1).setDuration(500);
-        gridLayout.addView(setAndroidImage, i);
-        notTapped[i] = false;
+
+        ImageView imgOne,imgTwo, imgThree, imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine;
+
+        imgOne = findViewById(R.id.imgOne);
+        imgTwo = findViewById(R.id.imgTwo);
+        imgThree = findViewById(R.id.imgThree);
+        imgFour = findViewById(R.id.imgFour);
+        imgFive = findViewById(R.id.imgFive);
+        imgSix = findViewById(R.id.imgSix);
+        imgSeven = findViewById(R.id.imgSeven);
+        imgEight = findViewById(R.id.imgEight);
+        imgNine = findViewById(R.id.imgNine);
+        switch (tiTag) {
+            case 0:
+                gridLayout.removeView(imgOne);
+                imgOne.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgOne.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgOne.setTranslationX(2000);
+                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgOne, tiTag);
+                break;
+            case 1:
+                gridLayout.removeView(imgTwo);
+                imgTwo.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgTwo.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgTwo.setTranslationX(2000);
+                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgTwo, tiTag);
+                break;
+            case 2:
+                gridLayout.removeView(imgThree);
+                imgThree.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgThree.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgThree.setTranslationX(2000);
+                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgThree, tiTag);
+                break;
+            case 3:
+                gridLayout.removeView(imgFour);
+                imgFour.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgFour.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgFour.setTranslationX(2000);
+                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgFour, tiTag);
+                break;
+            case 4:
+                gridLayout.removeView(imgFive);
+                imgFive.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgFive.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgFive.setTranslationX(2000);
+                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgFive, tiTag);
+                break;
+            case 5:
+                gridLayout.removeView(imgSix);
+                imgSix.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgSix.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgSix.setTranslationX(2000);
+                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgSix, tiTag);
+                break;
+            case 6:
+                gridLayout.removeView(imgSeven);
+                imgSeven.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgSeven.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgSeven.setTranslationX(2000);
+                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgSeven, tiTag);
+                break;
+            case 7:
+                gridLayout.removeView(imgEight);
+                imgEight.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgEight.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgEight.setTranslationX(2000);
+                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgEight, tiTag);
+                break;
+            case 8:
+                gridLayout.removeView(imgNine);
+                imgNine.setImageResource(icon);
+                gridLayout.setUseDefaultMargins(true);
+                imgNine.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                imgNine.setTranslationX(2000);
+                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                Log.i("tags", "i is: " + tiTag);
+                gridLayout.addView(imgNine, tiTag);
+                break;
+                default: break;
+        }
+        notTapped[tiTag] = false;
         currentPlayer = Player.ONE;
         falseCount++;
     }
+
 
     //this is a function to check winner
     private void checkWinner() {
