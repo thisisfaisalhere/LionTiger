@@ -27,7 +27,7 @@ import libs.mjn.prettydialog.PrettyDialogCallback;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EasyGameModeFragment extends Fragment implements View.OnClickListener{
+public class EasyGameModeFragment extends Fragment {
 
     public EasyGameModeFragment() {
         // Required empty public constructor
@@ -92,10 +92,84 @@ public class EasyGameModeFragment extends Fragment implements View.OnClickListen
             playerChoices[i] = Player.INPUT;
         }
 
+        imgOne = view.findViewById(R.id.imgOne);
+        imgTwo = view.findViewById(R.id.imgTwo);
+        imgThree = view.findViewById(R.id.imgThree);
+        imgFour = view.findViewById(R.id.imgFour);
+        imgFive = view.findViewById(R.id.imgFive);
+        imgSix = view.findViewById(R.id.imgSix);
+        imgSeven = view.findViewById(R.id.imgSeven);
+        imgEight = view.findViewById(R.id.imgEight);
+        imgNine = view.findViewById(R.id.imgNine);
+
         imgOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgOne;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgTwo;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgThree;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgFour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgFour;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgFive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgFive;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgSix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgSix;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgSeven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgSeven;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgEight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgEight;
+                tappedOnImgViewEasy();
+            }
+        });
+
+        imgNine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tappedImageView = imgNine;
                 tappedOnImgViewEasy();
             }
         });
@@ -177,16 +251,6 @@ public class EasyGameModeFragment extends Fragment implements View.OnClickListen
 
     private void setAndroidImg() {
         icon = R.drawable.android;
-
-        imgOne = view.findViewById(R.id.imgOne);
-        imgTwo = view.findViewById(R.id.imgTwo);
-        imgThree = view.findViewById(R.id.imgThree);
-        imgFour = view.findViewById(R.id.imgFour);
-        imgFive = view.findViewById(R.id.imgFive);
-        imgSix = view.findViewById(R.id.imgSix);
-        imgSeven = view.findViewById(R.id.imgSeven);
-        imgEight = view.findViewById(R.id.imgEight);
-        imgNine = view.findViewById(R.id.imgNine);
         switch (tiTag) {
             case 0:
                 gridLayout.removeView(imgOne);
@@ -325,7 +389,7 @@ public class EasyGameModeFragment extends Fragment implements View.OnClickListen
         if(!showed) {
             final PrettyDialog prettyDialog = new PrettyDialog(getContext());
             prettyDialog.setIcon(icon).setTitle(message + " is our Winner")
-                    .addButton("Rest Game",
+                    .addButton("Reset Game",
                             R.color.pdlg_color_white,  // button text color
                             R.color.pdlg_color_green,  // button background color
                             new PrettyDialogCallback() {  // button OnClick listener
@@ -346,7 +410,7 @@ public class EasyGameModeFragment extends Fragment implements View.OnClickListen
     private void drawDialog() {
         final PrettyDialog prettyDialog = new PrettyDialog(getContext());
         prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again")
-                .addButton("Rest Game",
+                .addButton("Reset Game",
                         R.color.pdlg_color_white,  // button text color
                         R.color.pdlg_color_green,  // button background color
                         new PrettyDialogCallback() {  // button OnClick listener
