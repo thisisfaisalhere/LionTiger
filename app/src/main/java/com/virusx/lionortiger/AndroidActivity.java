@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import com.parse.ParseInstallation;
 import java.util.Random;
-
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
