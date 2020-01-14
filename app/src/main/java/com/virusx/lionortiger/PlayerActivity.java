@@ -170,7 +170,7 @@ public class PlayerActivity extends AppCompatActivity {
         if(!showed) {
             final PrettyDialog prettyDialog = new PrettyDialog(PlayerActivity.this);
             prettyDialog.setIcon(icon).setTitle(message + " is our Winner")
-                    .addButton("Rest Game",
+                    .addButton("Reset Game",
                             R.color.pdlg_color_white,  // button text color
                             R.color.pdlg_color_green,  // button background color
                             new PrettyDialogCallback() {  // button OnClick listener
@@ -191,7 +191,7 @@ public class PlayerActivity extends AppCompatActivity {
     private void drawDialog() {
         final PrettyDialog prettyDialog = new PrettyDialog(PlayerActivity.this);
         prettyDialog.setIcon(R.drawable.warning).setTitle("It's a Draw. Rest to Play Again")
-                .addButton("Rest Game",
+                .addButton("Reset Game",
                 R.color.pdlg_color_white,  // button text color
                 R.color.pdlg_color_green,  // button background color
                 new PrettyDialogCallback() {  // button OnClick listener
