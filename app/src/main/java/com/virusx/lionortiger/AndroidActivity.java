@@ -136,7 +136,7 @@ public class AndroidActivity extends AppCompatActivity {
         icon = R.drawable.tiger;
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(-2000);
-        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(100);
         notTapped[tiTag] = false;
         currentPlayer = Player.TWO;
         falseCount++;
@@ -147,7 +147,7 @@ public class AndroidActivity extends AppCompatActivity {
             public void run() {
                 androidPlays();
             }
-        }, 1000);
+        }, 150);
     }
 
     private void setAndroidImg() {
