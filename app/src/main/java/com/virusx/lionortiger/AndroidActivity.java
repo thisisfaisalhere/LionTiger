@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.parse.ParseInstallation;
 import java.util.Random;
+
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -42,8 +44,8 @@ public class AndroidActivity extends AppCompatActivity {
     private String message;
 
     //UI components
-    private Button resetBtn;
-    private GridLayout grid;
+    private Button resetBtnAndroid;
+    private GridLayout gridLayout;
     private ImageView tappedImageView;
 
     @Override
@@ -54,32 +56,34 @@ public class AndroidActivity extends AppCompatActivity {
         //setting up parse server
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
+        setTitle("Tiger or Android");
+
         //initializing UI components
-        resetBtn = findViewById(R.id.resetBtnAndroid);
-        grid = findViewById(R.id.gridAndoird);
+        resetBtnAndroid = findViewById(R.id.resetBtnAndroid);
+        gridLayout = findViewById(R.id.gridAndroid);
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
-        resetBtn.setOnClickListener(new View.OnClickListener() {
+        resetBtnAndroid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetTheGame();
             }
         });
 
-        //initializing each grid with no input variable
+        //initializing each gridLayout with no input variable
         for(int i = 0; i<playerChoices.length; i++) {
             playerChoices[i] = Player.INPUT;
         }
     }
 
-    public void tappedOnImgGrid(View imageView) {
+    public void clickedOnImgView(View imageView) {
         tappedImageView = (ImageView) imageView;
         //conditional statements for the game
         if(!GameOver) {
             tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-            if(notTapped[tiTag - 1]) {
-                playerChoices[tiTag - 1] = currentPlayer;
+            if(notTapped[tiTag]) {
+                playerChoices[tiTag] = currentPlayer;
                 if(falseCount != notTapped.length - 1 )
                     setImage();
                 else if (falseCount == 8) {
@@ -88,12 +92,12 @@ public class AndroidActivity extends AppCompatActivity {
                         setImage();
                         drawDialog();
                         GameOver = true;
-                        resetBtn.setVisibility(View.VISIBLE);
+                        resetBtnAndroid.setVisibility(View.VISIBLE);
                     }
                 } else {
                     drawDialog();
                     GameOver = true;
-                    resetBtn.setVisibility(View.VISIBLE);
+                    resetBtnAndroid.setVisibility(View.VISIBLE);
                 }
             } else {
                 Toasty.info(AndroidActivity.this, "Choose another Grid",
@@ -109,18 +113,16 @@ public class AndroidActivity extends AppCompatActivity {
 
     private void androidPlays() {
         if(!GameOver) {
-            tiTag = getRandomNo();
+            int i = getRandomNo();
             Log.i("tag3", "getRandomNo() called");
-            if(notTapped[tiTag]) {
+            if(notTapped[i]) {
+                tiTag = i;
                 Log.i("tag", "randomNo generated is: " + tiTag);
                 playerChoices[tiTag] = currentPlayer;
-                setImage();
+                setAndroidImg(i);
             } else androidPlays();
             //iterating through the win cases array to find the winner
             checkWinner();
-        } else {
-            Toasty.warning(AndroidActivity.this, "Game Over. Reset to Play Again",
-                    Toasty.LENGTH_SHORT, true).show();
         }
     }
 
@@ -131,28 +133,35 @@ public class AndroidActivity extends AppCompatActivity {
 
     //this is a function to set image
     private void setImage() {
-        if(currentPlayer == Player.ONE) {
-            icon = R.drawable.tiger;
-            tappedImageView.setImageResource(icon);
-            tappedImageView.setTranslationX(-2000);
-            tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
-            notTapped[tiTag - 1] = false;
-            currentPlayer = Player.TWO;
-            Log.i("tag2", "androidPlay() called");
-            androidPlays();
-        } else if(currentPlayer == Player.TWO) {
-            Log.i("tag4", "setImage() called for android");
-            icon = R.drawable.android;
-            ImageView setAndroidImage = new ImageView(AndroidActivity.this);
+        icon = R.drawable.tiger;
+        tappedImageView.setImageResource(icon);
+        tappedImageView.setTranslationX(-2000);
+        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(500);
+        notTapped[tiTag] = false;
+        currentPlayer = Player.TWO;
+        Log.i("tag2", "androidPlay() called");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                androidPlays();
+            }
+        }, 1000);
+        falseCount++;
+    }
 
-            setAndroidImage.setImageResource(icon);
-            grid.addView(setAndroidImage, tiTag);
-            setAndroidImage.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
-            setAndroidImage.setTranslationX(2000);
-            setAndroidImage.animate().translationXBy(-2000).alpha(1).setDuration(500);
-            currentPlayer = Player.ONE;
-            notTapped[tiTag] = false;
-        }
+    private void setAndroidImg(int i) {
+        Log.i("tag4", "setImage() called for android");
+        icon = R.drawable.android;
+        ImageView setAndroidImage = new ImageView(AndroidActivity.this);
+        setAndroidImage.setImageResource(icon);
+        gridLayout.setUseDefaultMargins(true);
+        setAndroidImage.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+        setAndroidImage.setTranslationX(2000);
+        setAndroidImage.animate().translationXBy(-2000).alpha(1).setDuration(500);
+        gridLayout.addView(setAndroidImage, i);
+        notTapped[i] = false;
+        currentPlayer = Player.ONE;
         falseCount++;
     }
 
@@ -164,17 +173,17 @@ public class AndroidActivity extends AppCompatActivity {
                     && playerChoices[checkWinner[2]] == playerChoices[checkWinner[0]]
                     && playerChoices[checkWinner[0]] != Player.INPUT) {
                 if(currentPlayer == Player.TWO) {
-                    if(notTapped[tiTag - 1]) {
+                    if(notTapped[tiTag]) {
                         setImage();
                         flag = false;
-                        message = "android";
+                        message = "Android";
                         showMessage();
                         break;
                     }
                     flag = false;
                     message = "Tiger";
                 } else {
-                    if(notTapped[tiTag - 1]) {
+                    if(notTapped[tiTag]) {
                         setImage();
                         flag = false;
                         message = "Tiger";
@@ -207,7 +216,7 @@ public class AndroidActivity extends AppCompatActivity {
                             }
                     ).show();
             GameOver = true;
-            resetBtn.setVisibility(View.VISIBLE);
+            resetBtnAndroid.setVisibility(View.VISIBLE);
             showed = true;
         }
     }
@@ -231,16 +240,18 @@ public class AndroidActivity extends AppCompatActivity {
 
     // reset game function to reset all the variables
     private void resetTheGame() {
-        for(int i = 0; i < grid.getChildCount(); i++) {
-            ImageView imageView = (ImageView) grid.getChildAt(i);
+        for(int i = 0; i < gridLayout.getChildCount(); i++) {
+            ImageView imageView = (ImageView) gridLayout.getChildAt(i);
             imageView.setImageDrawable(null);
             imageView.setAlpha(0.2f);
+        }
+        for(int i = 0; i < playerChoices.length; i++) {
             playerChoices[i] = Player.INPUT;
             notTapped[i] = true;
         }
         flag = true;
         falseCount = 0;
-        resetBtn.setVisibility(View.GONE);
+        resetBtnAndroid.setVisibility(View.GONE);
         GameOver = false;
         showed = false;
         currentPlayer = Player.ONE;

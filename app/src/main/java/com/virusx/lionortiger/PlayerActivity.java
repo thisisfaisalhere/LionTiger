@@ -53,7 +53,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         //initializing UI components
         resetBtn = findViewById(R.id.resetBtnAndroid);
-        grid = findViewById(R.id.gridAndoird);
+        grid = findViewById(R.id.gridAndroid);
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
@@ -210,6 +210,8 @@ public class PlayerActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) grid.getChildAt(i);
             imageView.setImageDrawable(null);
             imageView.setAlpha(0.2f);
+        }
+        for(int i = 0; i < playerChoices.length; i++) {
             playerChoices[i] = Player.INPUT;
             notTapped[i] = true;
         }

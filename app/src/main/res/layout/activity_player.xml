@@ -8,7 +8,7 @@
     tools:context=".PlayerActivity">
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridAndoird"
+        android:id="@+id/gridAndroid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#CDDC39"
@@ -243,6 +243,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridAndoird"
+        app:layout_constraintTop_toBottomOf="@+id/gridAndroid"
         app:layout_constraintVertical_bias="0.043" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle("Home");
+
         playerGrid = findViewById(R.id.playerGrid);
         androidGrid = findViewById(R.id.androidGrid);
 
