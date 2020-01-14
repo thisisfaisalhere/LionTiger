@@ -62,14 +62,13 @@ public class EasyGameModeFragment extends Fragment {
     private Button resetBtnAndroid;
     private GridLayout gridLayout;
     private ImageView tappedImageView;
-    private View view;
     private ImageView imgOne,imgTwo, imgThree, imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_easy_game_mode, container, false);
+        View view = inflater.inflate(R.layout.fragment_game_layout, container, false);
 
         //setting up parse server
         ParseInstallation.getCurrentInstallation().saveInBackground();
@@ -441,5 +440,4 @@ public class EasyGameModeFragment extends Fragment {
         showed = false;
         currentPlayer = Player.ONE;
     }
-
 }
