@@ -15,10 +15,6 @@ import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class EasyGameModeFragment extends Fragment {
 
     public EasyGameModeFragment() {
@@ -174,13 +170,12 @@ public class EasyGameModeFragment extends Fragment {
     }
 
     private void tappedOnImgViewEasy() {
-        //conditional statements for the game
-        if(yourturn) {
-            if(!GameOver) {
+        if (!GameOver) {
+            if (yourturn) {
                 tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-                if(notTapped[tiTag]) {
+                if (notTapped[tiTag]) {
                     playerChoices[tiTag] = currentPlayer;
-                    if(falseCount != notTapped.length - 1 )
+                    if (falseCount != notTapped.length - 1)
                         setImage();
                     else if (falseCount == 8) {
                         checkWinner();
@@ -202,11 +197,11 @@ public class EasyGameModeFragment extends Fragment {
                 //iterating through the win cases array to find the winner
                 checkWinner();
             } else {
-                Toasty.warning(getContext(), "Game Over. Reset to Play Again",
+                Toasty.warning(getContext(), "Slow Down Bud.",
                         Toasty.LENGTH_SHORT, true).show();
             }
-        } else {
-            Toasty.warning(getContext(), "Slow Down Bud.",
+        } else{
+            Toasty.warning(getContext(), "Game Over. Reset to Play Again",
                     Toasty.LENGTH_SHORT, true).show();
         }
     }

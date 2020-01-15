@@ -1,6 +1,5 @@
 package com.virusx.lionortiger;
 
-
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -18,10 +17,6 @@ import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ExpertGameModeFragment extends Fragment {
 
 
