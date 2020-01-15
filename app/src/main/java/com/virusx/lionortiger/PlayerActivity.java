@@ -1,12 +1,12 @@
 package com.virusx.lionortiger;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import com.parse.ParseInstallation;
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -41,19 +41,20 @@ public class PlayerActivity extends AppCompatActivity {
     //UI components
     private Button resetBtn;
     private GridLayout grid;
-    private ImageView tappedImageView;
+    private ImageView tappedImageView, firstPlayer, secondPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        //setting up parse server
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-
         //initializing UI components
-        resetBtn = findViewById(R.id.resetBtnAndroid);
-        grid = findViewById(R.id.gridAndroid);
+        resetBtn = findViewById(R.id.resetBtn);
+        grid = findViewById(R.id.grid);
+
+        firstPlayer = findViewById(R.id.firstPlayer);
+        secondPlayer = findViewById(R.id.secondPlayer);
+        firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
@@ -118,11 +119,15 @@ public class PlayerActivity extends AppCompatActivity {
             currentPlayer = Player.TWO;
             translationValue = -2000;
             translationXByValue = 2000;
+            firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+            secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
         } else if(currentPlayer == Player.TWO) {
             icon = R.drawable.lion;
             currentPlayer = Player.ONE;
             translationValue = 2000;
             translationXByValue = -2000;
+            secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+            firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
         }
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(translationValue);
@@ -221,5 +226,7 @@ public class PlayerActivity extends AppCompatActivity {
         GameOver = false;
         showed = false;
         currentPlayer = Player.ONE;
+        secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+        firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
     }
 }

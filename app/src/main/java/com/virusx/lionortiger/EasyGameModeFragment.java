@@ -1,24 +1,16 @@
 package com.virusx.lionortiger;
 
-
 import android.os.Bundle;
-
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
-
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.parse.ParseInstallation;
-
 import java.util.Random;
-
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -54,6 +46,7 @@ public class EasyGameModeFragment extends Fragment {
     private int falseCount = 0;
     private boolean flag = true;
     private boolean showed = false;
+    private boolean yourturn = true;
     private int tiTag;
     private int icon;
     private String message;
@@ -61,17 +54,15 @@ public class EasyGameModeFragment extends Fragment {
     //UI components
     private Button resetBtnAndroid;
     private GridLayout gridLayout;
-    private ImageView tappedImageView;
-    private ImageView imgOne,imgTwo, imgThree, imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine;
+    private ImageView tappedImageView, imgOne, imgTwo, imgThree,
+            imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine,
+            firstPlayerImg, secondPlayerImg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_layout, container, false);
-
-        //setting up parse server
-        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         //initializing UI components
         resetBtnAndroid = view.findViewById(R.id.resetBtnAndroid);
@@ -100,6 +91,12 @@ public class EasyGameModeFragment extends Fragment {
         imgSeven = view.findViewById(R.id.imgSeven);
         imgEight = view.findViewById(R.id.imgEight);
         imgNine = view.findViewById(R.id.imgNine);
+
+        firstPlayerImg = view.findViewById(R.id.gameLayoutFirst);
+        secondPlayerImg = view.findViewById(R.id.gameLayoutSecond);
+
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.imageBackgroundColor));
 
         imgOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,33 +175,38 @@ public class EasyGameModeFragment extends Fragment {
 
     private void tappedOnImgViewEasy() {
         //conditional statements for the game
-        if(!GameOver) {
-            tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-            if(notTapped[tiTag]) {
-                playerChoices[tiTag] = currentPlayer;
-                if(falseCount != notTapped.length - 1 )
-                    setImage();
-                else if (falseCount == 8) {
-                    checkWinner();
-                    if (flag) {
+        if(yourturn) {
+            if(!GameOver) {
+                tiTag = Integer.parseInt(tappedImageView.getTag().toString());
+                if(notTapped[tiTag]) {
+                    playerChoices[tiTag] = currentPlayer;
+                    if(falseCount != notTapped.length - 1 )
                         setImage();
+                    else if (falseCount == 8) {
+                        checkWinner();
+                        if (flag) {
+                            setImage();
+                            drawDialog();
+                            GameOver = true;
+                            resetBtnAndroid.setVisibility(View.VISIBLE);
+                        }
+                    } else {
                         drawDialog();
                         GameOver = true;
                         resetBtnAndroid.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    drawDialog();
-                    GameOver = true;
-                    resetBtnAndroid.setVisibility(View.VISIBLE);
+                    Toasty.info(getContext(), "Choose another Grid",
+                            Toasty.LENGTH_SHORT, true).show();
                 }
+                //iterating through the win cases array to find the winner
+                checkWinner();
             } else {
-                Toasty.info(getContext(), "Choose another Grid",
+                Toasty.warning(getContext(), "Game Over. Reset to Play Again",
                         Toasty.LENGTH_SHORT, true).show();
             }
-            //iterating through the win cases array to find the winner
-            checkWinner();
         } else {
-            Toasty.warning(getContext(), "Game Over. Reset to Play Again",
+            Toasty.warning(getContext(), "Slow Down Bud.",
                     Toasty.LENGTH_SHORT, true).show();
         }
     }
@@ -212,10 +214,8 @@ public class EasyGameModeFragment extends Fragment {
     private void androidPlays() {
         if(!GameOver) {
             int i = getRandomNo();
-            Log.i("tag3", "getRandomNo() called");
             if(notTapped[i]) {
                 tiTag = i;
-                Log.i("tag", "randomNo generated is: " + tiTag);
                 playerChoices[tiTag] = currentPlayer;
                 setAndroidImg();
             } else androidPlays();
@@ -238,7 +238,11 @@ public class EasyGameModeFragment extends Fragment {
         notTapped[tiTag] = false;
         currentPlayer = Player.TWO;
         falseCount++;
-        Log.i("tag2", "androidPlay() called");
+        yourturn = false;
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.rootLayoutColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.imageBackgroundColor));
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -258,7 +262,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgOne.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgOne.setTranslationX(2000);
                 imgOne.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgOne, tiTag);
                 break;
             case 1:
@@ -268,7 +271,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgTwo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgTwo.setTranslationX(2000);
                 imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgTwo, tiTag);
                 break;
             case 2:
@@ -278,7 +280,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgThree.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgThree.setTranslationX(2000);
                 imgThree.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgThree, tiTag);
                 break;
             case 3:
@@ -288,7 +289,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgFour.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFour.setTranslationX(2000);
                 imgFour.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgFour, tiTag);
                 break;
             case 4:
@@ -298,7 +298,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgFive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFive.setTranslationX(2000);
                 imgFive.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgFive, tiTag);
                 break;
             case 5:
@@ -308,7 +307,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgSix.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSix.setTranslationX(2000);
                 imgSix.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgSix, tiTag);
                 break;
             case 6:
@@ -318,7 +316,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgSeven.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSeven.setTranslationX(2000);
                 imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgSeven, tiTag);
                 break;
             case 7:
@@ -328,7 +325,6 @@ public class EasyGameModeFragment extends Fragment {
                 imgEight.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgEight.setTranslationX(2000);
                 imgEight.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                Log.i("tags", "i is: " + tiTag);
                 gridLayout.addView(imgEight, tiTag);
                 break;
             case 8:
@@ -337,13 +333,17 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgNine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgNine.setTranslationX(2000);
-                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(500);
                 gridLayout.addView(imgNine, tiTag);
                 break;
             default: break;
         }
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.imageBackgroundColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.rootLayoutColor));
         notTapped[tiTag] = false;
+        yourturn = true;
         currentPlayer = Player.ONE;
         falseCount++;
     }
@@ -439,5 +439,10 @@ public class EasyGameModeFragment extends Fragment {
         GameOver = false;
         showed = false;
         currentPlayer = Player.ONE;
+        yourturn = true;
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.imageBackgroundColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.rootLayoutColor));
     }
 }

@@ -8,15 +8,74 @@
     tools:context=".EasyGameModeFragment">
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gameLayoutPlayerTurn"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/gameLayoutFirst"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/tiger"
+            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_column="0"
+            app:layout_row="0"
+            app:srcCompat="@drawable/tiger" />
+
+        <ImageView
+            android:id="@+id/gameLayoutVs"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/vs"
+            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_column="1"
+            app:layout_row="0"
+            app:srcCompat="@drawable/vs" />
+
+        <ImageView
+            android:id="@+id/gameLayoutSecond"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/android"
+            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_column="2"
+            app:layout_row="0"
+            app:srcCompat="@drawable/android" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridAndroid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:background="#CDDC39"
         app:columnCount="3"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameLayoutPlayerTurn"
         app:rowCount="3">
 
         <ImageView
@@ -246,33 +305,18 @@
 
     </androidx.gridlayout.widget.GridLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="@string/tiger_or_android_title"
-        android:textColor="#fff"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/resetBtnAndroid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:background="#4CAF50"
         android:text="@string/reset"
         android:textColor="#F0FCCB"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridAndroid"
-        app:layout_constraintVertical_bias="0.043" />
+        app:layout_constraintTop_toBottomOf="@+id/gridAndroid" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

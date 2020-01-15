@@ -8,19 +8,70 @@
     tools:context=".PlayerActivity">
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridAndroid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#CDDC39"
-        app:columnCount="3"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/turnHighlightGrid"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/firstPlayer"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/tiger"
+            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_column="0"
+            app:layout_row="0"
+            app:srcCompat="@drawable/tiger" />
+
+        <ImageView
+            android:id="@+id/vsImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_column="1"
+            app:layout_row="0"
+            app:srcCompat="@drawable/vs"
+            android:contentDescription="@string/vs"/>
+
+        <ImageView
+            android:id="@+id/secondPlayer"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/lion"
+            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_column="2"
+            app:layout_row="0"
+            app:srcCompat="@drawable/lion" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="#CDDC39"
+        app:columnCount="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/turnHighlightGrid"
         app:rowCount="3">
 
         <ImageView
-            android:id="@+id/img9"
+            android:id="@+id/img1"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
@@ -37,9 +88,9 @@
             android:paddingTop="3dp"
             android:paddingRight="3dp"
             android:paddingBottom="3dp"
-            android:tag="9"
-            app:layout_column="2"
-            app:layout_row="2" />
+            android:tag="1"
+            app:layout_column="0"
+            app:layout_row="0" />
 
         <ImageView
             android:id="@+id/img2"
@@ -64,7 +115,7 @@
             app:layout_row="0" />
 
         <ImageView
-            android:id="@+id/img8"
+            android:id="@+id/img3"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
@@ -81,12 +132,12 @@
             android:paddingTop="3dp"
             android:paddingRight="3dp"
             android:paddingBottom="3dp"
-            android:tag="8"
-            app:layout_column="1"
-            app:layout_row="2" />
+            android:tag="3"
+            app:layout_column="2"
+            app:layout_row="0" />
 
         <ImageView
-            android:id="@+id/img7"
+            android:id="@+id/img4"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
@@ -103,9 +154,9 @@
             android:paddingTop="3dp"
             android:paddingRight="3dp"
             android:paddingBottom="3dp"
-            android:tag="7"
+            android:tag="4"
             app:layout_column="0"
-            app:layout_row="2" />
+            app:layout_row="1" />
 
         <ImageView
             android:id="@+id/img5"
@@ -152,29 +203,7 @@
             app:layout_row="1" />
 
         <ImageView
-            android:id="@+id/img1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:alpha="0.2"
-            android:background="#4CAF50"
-            android:onClick="tappedOnImgGrid"
-            android:padding="3dp"
-            android:paddingLeft="3dp"
-            android:paddingTop="3dp"
-            android:paddingRight="3dp"
-            android:paddingBottom="3dp"
-            android:tag="1"
-            app:layout_column="0"
-            app:layout_row="0"
-            android:contentDescription="@string/lion_or_tiger" />
-
-        <ImageView
-            android:id="@+id/img4"
+            android:id="@+id/img7"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
@@ -191,12 +220,12 @@
             android:paddingTop="3dp"
             android:paddingRight="3dp"
             android:paddingBottom="3dp"
-            android:tag="4"
+            android:tag="7"
             app:layout_column="0"
-            app:layout_row="1" />
+            app:layout_row="2" />
 
         <ImageView
-            android:id="@+id/img3"
+            android:id="@+id/img9"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
@@ -213,36 +242,44 @@
             android:paddingTop="3dp"
             android:paddingRight="3dp"
             android:paddingBottom="3dp"
-            android:tag="3"
+            android:tag="9"
             app:layout_column="2"
-            app:layout_row="0" />
+            app:layout_row="2" />
+
+        <ImageView
+            android:id="@+id/img8"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:alpha="0.2"
+            android:background="#4CAF50"
+            android:contentDescription="@string/lion_or_tiger"
+            android:onClick="tappedOnImgGrid"
+            android:padding="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"
+            android:tag="8"
+            app:layout_column="1"
+            app:layout_row="2" />
+
     </androidx.gridlayout.widget.GridLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="@string/lion_or_tiger"
-        android:textColor="#fff"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
-        android:id="@+id/resetBtnAndroid"
+        android:id="@+id/resetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="45dp"
         android:background="#4CAF50"
         android:text="@string/reset"
         android:textColor="#F0FCCB"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridAndroid"
-        app:layout_constraintVertical_bias="0.043" />
+        app:layout_constraintTop_toBottomOf="@+id/grid" />
 </androidx.constraintlayout.widget.ConstraintLayout>

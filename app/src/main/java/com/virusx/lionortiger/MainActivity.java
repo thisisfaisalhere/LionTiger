@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.parse.ParseInstallation;
+
 public class MainActivity extends AppCompatActivity {
 
     private GridLayout playerGrid, androidGrid;
@@ -14,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //setting up parse server
+        ParseInstallation.getCurrentInstallation().saveInBackground();
 
         setTitle("Home");
 
