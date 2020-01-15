@@ -234,7 +234,7 @@ public class EasyGameModeFragment extends Fragment {
         icon = R.drawable.tiger;
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(-2000);
-        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(100);
+        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(300);
         notTapped[tiTag] = false;
         currentPlayer = Player.TWO;
         falseCount++;
@@ -249,7 +249,7 @@ public class EasyGameModeFragment extends Fragment {
             public void run() {
                 androidPlays();
             }
-        }, 150);
+        }, 350);
     }
 
     private void setAndroidImg() {
@@ -261,7 +261,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgOne.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgOne.setTranslationX(2000);
-                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgOne, tiTag);
                 break;
             case 1:
@@ -270,7 +270,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgTwo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgTwo.setTranslationX(2000);
-                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgTwo, tiTag);
                 break;
             case 2:
@@ -279,7 +279,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgThree.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgThree.setTranslationX(2000);
-                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgThree, tiTag);
                 break;
             case 3:
@@ -288,7 +288,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgFour.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFour.setTranslationX(2000);
-                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgFour, tiTag);
                 break;
             case 4:
@@ -297,7 +297,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgFive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFive.setTranslationX(2000);
-                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgFive, tiTag);
                 break;
             case 5:
@@ -306,7 +306,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgSix.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSix.setTranslationX(2000);
-                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgSix, tiTag);
                 break;
             case 6:
@@ -315,7 +315,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgSeven.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSeven.setTranslationX(2000);
-                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(100);
+                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgSeven, tiTag);
                 break;
             case 7:
@@ -324,7 +324,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgEight.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgEight.setTranslationX(2000);
-                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgEight, tiTag);
                 break;
             case 8:
@@ -333,7 +333,7 @@ public class EasyGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgNine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgNine.setTranslationX(2000);
-                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(500);
+                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgNine, tiTag);
                 break;
             default: break;
