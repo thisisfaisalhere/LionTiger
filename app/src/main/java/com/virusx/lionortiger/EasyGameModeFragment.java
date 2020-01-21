@@ -89,7 +89,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgOne;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -97,7 +97,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgTwo;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -105,7 +105,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgThree;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -113,7 +113,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgFour;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -121,7 +121,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgFive;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -129,7 +129,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgSix;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -137,7 +137,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgSeven;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -145,7 +145,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgEight;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -153,7 +153,7 @@ public class EasyGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgNine;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -165,7 +165,7 @@ public class EasyGameModeFragment extends Fragment {
         return view;
     }
 
-    private void tappedOnImgViewEasy() {
+    private void tappedOnImgView() {
         if (!GameOver) {
             if (yourTurn) {
                 tiTag = Integer.parseInt(tappedImageView.getTag().toString());

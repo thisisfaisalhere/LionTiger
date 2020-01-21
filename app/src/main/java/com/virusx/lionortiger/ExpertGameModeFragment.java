@@ -6,13 +6,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import java.util.Random;
+
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -24,22 +23,6 @@ public class ExpertGameModeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private enum Player {
-        ONE, TWO, INPUT
-    }
-    private Player currentPlayer = Player.ONE;
-    private Player[] playerChoices = new Player[9];
-    //declared win cases
-    private int[][] winCases =
-            {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-                    {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-                    {0, 4, 8}, {2, 4, 6}};
-
-    //some variables to check the flow of the game
-    private boolean[] notTapped =
-            {true, true, true,
-                    true, true, true,
-                    true, true, true};
     private boolean GameOver = false;
     private int falseCount = 0;
     private boolean flag = true;
@@ -48,8 +31,9 @@ public class ExpertGameModeFragment extends Fragment {
     private int tiTag;
     private int icon;
     private String message;
-    private int turnNo;
-    private int helper;
+    private Variables variables;
+    private boolean isDraw = false;
+    private Variables.Player winner;
 
     //UI components
     private Button resetBtnAndroid;
@@ -77,10 +61,9 @@ public class ExpertGameModeFragment extends Fragment {
             }
         });
 
-        //initializing each gridLayout with no input variable
-        for(int i = 0; i<playerChoices.length; i++) {
-            playerChoices[i] = Player.INPUT;
-        }
+        variables = new Variables();
+        variables.playerChoicesInitializer();
+        variables.setCurrentPlayer(Variables.Player.ONE);
 
         imgOne = view.findViewById(R.id.imgOne);
         imgTwo = view.findViewById(R.id.imgTwo);
@@ -95,14 +78,21 @@ public class ExpertGameModeFragment extends Fragment {
         firstPlayerImg = view.findViewById(R.id.gameLayoutFirst);
         secondPlayerImg = view.findViewById(R.id.gameLayoutSecond);
 
-        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.imageBackgroundColor));
+        if(variables.getCurrentPlayer() == Variables.Player.ONE) {
+            firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+            secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+            yourTurn = true;
+        } else {
+            firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+            secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+            yourTurn = false;
+        }
 
         imgOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgOne;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -110,7 +100,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgTwo;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -118,7 +108,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgThree;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -126,7 +116,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgFour;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -134,7 +124,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgFive;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -142,7 +132,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgSix;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -150,7 +140,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgSeven;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -158,7 +148,7 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgEight;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
 
@@ -166,20 +156,25 @@ public class ExpertGameModeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 tappedImageView = imgNine;
-                tappedOnImgViewEasy();
+                tappedOnImgView();
             }
         });
+
+        if(variables.getCurrentPlayer() == Variables.Player.TWO) {
+            androidPlays();
+            yourTurn = true;
+        }
 
         return view;
     }
 
-    private void tappedOnImgViewEasy() {
+    private void tappedOnImgView() {
         if (!GameOver) {
             if (yourTurn) {
                 tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-                if (notTapped[tiTag]) {
-                    playerChoices[tiTag] = currentPlayer;
-                    if (falseCount != notTapped.length - 1)
+                if (variables.getNotTapped(tiTag)) {
+                    variables.setPlayerChoice(variables.getCurrentPlayer(), tiTag);
+                    if (falseCount != variables.notTappedLength() - 1)
                         setImage();
                     else if (falseCount == 8) {
                         checkWinner();
@@ -211,15 +206,29 @@ public class ExpertGameModeFragment extends Fragment {
     }
 
     private void androidPlays() {
-        if(!GameOver) {
-            int i = 0;
-            if(notTapped[i]) {
-                tiTag = i;
-                playerChoices[tiTag] = currentPlayer;
-                setAndroidImg();
+        if (!GameOver) {
+            GetGridLocation getGridLocation = new GetGridLocation();
+            tiTag = getGridLocation.getRandomNo(2);
+            if (variables.getNotTapped(tiTag)) {
+                variables.setPlayerChoice(variables.getCurrentPlayer(), tiTag);
+                if (falseCount != variables.notTappedLength() - 1)
+                    setAndroidImg();
+                else if (falseCount == 8) {
+                    checkWinner();
+                    if (flag) {
+                        setAndroidImg();
+                        drawDialog();
+                        GameOver = true;
+                        resetBtnAndroid.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    drawDialog();
+                    GameOver = true;
+                    resetBtnAndroid.setVisibility(View.VISIBLE);
+                }
+                //iterating through the win cases array to find the winner
+                checkWinner();
             } else androidPlays();
-            //iterating through the win cases array to find the winner
-            checkWinner();
         }
     }
 
@@ -229,18 +238,12 @@ public class ExpertGameModeFragment extends Fragment {
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(-2000);
         tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(300);
-        notTapped[tiTag] = false;
-        currentPlayer = Player.TWO;
+        variables.setNotTapped(tiTag);
+        variables.setCurrentPlayer(Variables.Player.TWO);
         falseCount++;
         yourTurn = false;
-        turnNo++;
-        if(turnNo == 3 && tiTag%2 != 0) {
-            helper = tiTag;
-        }
-        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.rootLayoutColor));
-        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.imageBackgroundColor));
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -336,44 +339,48 @@ public class ExpertGameModeFragment extends Fragment {
                 break;
             default: break;
         }
-        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.imageBackgroundColor));
-        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.rootLayoutColor));
-        notTapped[tiTag] = false;
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+        variables.setNotTapped(tiTag);
         yourTurn = true;
-        currentPlayer = Player.ONE;
+        variables.setCurrentPlayer(Variables.Player.ONE);
         falseCount++;
     }
 
 
     //this is a function to check winner
     private void checkWinner() {
+        int[][] winCases = variables.getWinCases();
+        Variables.Player[] choicesByPlayer = variables.getPlayerChoices();
         for(int[] checkWinner : winCases) {
-            if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
-                    && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
-                    && playerChoices[checkWinner[2]] == playerChoices[checkWinner[0]]
-                    && playerChoices[checkWinner[0]] != Player.INPUT) {
-                if(currentPlayer == Player.TWO) {
-                    if(notTapped[tiTag]) {
-                        setImage();
+            if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]
+                    && choicesByPlayer[checkWinner[1]] == choicesByPlayer[checkWinner[2]]
+                    && choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[0]]
+                    && choicesByPlayer[checkWinner[0]] != Variables.Player.INPUT) {
+                if(variables.getCurrentPlayer() == Variables.Player.TWO) {
+                    if(variables.getNotTapped(tiTag)) {
+                        setAndroidImg();
                         flag = false;
-                        message = "Android";
+                        message = "android";
+                        winner = Variables.Player.TWO;
                         showMessage();
                         break;
                     }
                     flag = false;
                     message = "Tiger";
+                    winner = Variables.Player.ONE;
                 } else {
-                    if(notTapped[tiTag]) {
+                    if(variables.getNotTapped(tiTag)) {
                         setImage();
                         flag = false;
                         message = "Tiger";
+                        winner = Variables.Player.ONE;
                         showMessage();
                         break;
                     }
                     flag = false;
                     message = "android";
+                    winner = Variables.Player.TWO;
                 }
                 showMessage();
                 break;
@@ -418,6 +425,7 @@ public class ExpertGameModeFragment extends Fragment {
                             }
                         }
                 ).show();
+        isDraw = true;
     }
 
     // reset game function to reset all the variables
@@ -427,21 +435,55 @@ public class ExpertGameModeFragment extends Fragment {
             imageView.setImageDrawable(null);
             imageView.setAlpha(0.2f);
         }
-        for(int i = 0; i < playerChoices.length; i++) {
-            playerChoices[i] = Player.INPUT;
-            notTapped[i] = true;
-        }
+        variables.playerChoicesInitializer();
+        variables.notTappedInitializer();
         flag = true;
         falseCount = 0;
         resetBtnAndroid.setVisibility(View.GONE);
         GameOver = false;
         showed = false;
-        currentPlayer = Player.ONE;
-        yourTurn = true;
-        turnNo = 0;
-        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.imageBackgroundColor));
-        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
-                R.color.rootLayoutColor));
+
+        if(isDraw) {
+            if(variables.getCurrentPlayer() == Variables.Player.ONE){
+                variables.setCurrentPlayer(Variables.Player.ONE);
+                secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+                firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+                yourTurn = true;
+                isDraw = false;
+            }
+            else{
+                variables.setCurrentPlayer(Variables.Player.TWO);
+                firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+                secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+                isDraw = false;
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        androidPlays();
+                    }
+                }, 200);
+                yourTurn = true;
+            }
+        } else {
+            if(winner == Variables.Player.TWO) {
+                variables.setCurrentPlayer(Variables.Player.TWO);
+                firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+                secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        androidPlays();
+                    }
+                }, 200);
+                yourTurn = true;
+            } else {
+                variables.setCurrentPlayer(Variables.Player.ONE);
+                secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
+                firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+                yourTurn = true;
+            }
+        }
     }
 }
