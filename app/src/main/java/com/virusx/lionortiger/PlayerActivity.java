@@ -14,22 +14,6 @@ import libs.mjn.prettydialog.PrettyDialogCallback;
 public class PlayerActivity extends AppCompatActivity {
 
     //declared enum variable
-    private enum Player {
-        ONE, TWO, INPUT
-    }
-    private Player currentPlayer = Player.ONE;
-    private Player[] playerChoices = new Player[9];
-    //declared win cases
-    private int[][] winCases =
-            {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-             {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-             {0, 4, 8}, {2, 4, 6}};
-
-    //some variables to check the flow of the game
-    private boolean[] notTapped =
-            {true, true, true,
-            true, true, true,
-            true, true, true};
     private boolean GameOver = false;
     private int falseCount = 0;
     private boolean flag = true;
@@ -37,6 +21,9 @@ public class PlayerActivity extends AppCompatActivity {
     private int tiTag;
     private int icon;
     private String message;
+    private Variables variables;
+    private boolean isDraw = false;
+    private Variables.Player winner;
 
     //UI components
     private Button resetBtn;
@@ -65,10 +52,9 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        //initializing each grid with no input variable
-        for(int i = 0; i<playerChoices.length; i++) {
-            playerChoices[i] = Player.INPUT;
-        }
+        variables = new Variables();
+        variables.playerChoicesInitializer();
+        variables.setCurrentPlayer(Variables.Player.ONE);
     }
 
     public void tappedOnImgGrid(View imageView) {
@@ -81,9 +67,9 @@ public class PlayerActivity extends AppCompatActivity {
         //conditional statements for the game
         if(!GameOver) {
             tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-            if(notTapped[tiTag - 1]) {
-                playerChoices[tiTag - 1] = currentPlayer;
-                if(falseCount != notTapped.length - 1 )
+            if(variables.getNotTapped(tiTag - 1)) {
+                variables.setPlayerChoice(variables.getCurrentPlayer(), tiTag - 1);
+                if(falseCount != variables.notTappedLength() - 1 )
                     setImage();
                 else if (falseCount == 8) {
                     checkWinner();
@@ -114,55 +100,65 @@ public class PlayerActivity extends AppCompatActivity {
     private void setImage() {
         int translationValue = 0;
         int translationXByValue = 0;
-        if(currentPlayer == Player.ONE) {
+        if(variables.getCurrentPlayer() == Variables.Player.ONE) {
             icon = R.drawable.tiger;
-            currentPlayer = Player.TWO;
+            variables.setCurrentPlayer(Variables.Player.TWO);
             translationValue = -2000;
             translationXByValue = 2000;
-            firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
-            secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
-        } else if(currentPlayer == Player.TWO) {
+            firstPlayer.setBackgroundColor(ContextCompat
+                    .getColor(this, R.color.rootLayoutColor));
+            secondPlayer.setBackgroundColor(ContextCompat
+                    .getColor(this, R.color.imageBackgroundColor));
+        } else if(variables.getCurrentPlayer() == Variables.Player.TWO) {
             icon = R.drawable.lion;
-            currentPlayer = Player.ONE;
+            variables.setCurrentPlayer(Variables.Player.ONE);
             translationValue = 2000;
             translationXByValue = -2000;
-            secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
-            firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            secondPlayer.setBackgroundColor(ContextCompat
+                    .getColor(this, R.color.rootLayoutColor));
+            firstPlayer.setBackgroundColor(ContextCompat
+                    .getColor(this, R.color.imageBackgroundColor));
         }
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(translationValue);
         tappedImageView.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
-        notTapped[tiTag - 1] = false;
+        variables.setNotTapped(tiTag - 1);
         falseCount++;
     }
 
     //this is a function to check winner
     private void checkWinner() {
+        int[][] winCases = variables.getWinCases();
+        Variables.Player[] choicesByPlayer = variables.getPlayerChoices();
         for(int[] checkWinner : winCases) {
-            if(playerChoices[checkWinner[0]] == playerChoices[checkWinner[1]]
-                    && playerChoices[checkWinner[1]] == playerChoices[checkWinner[2]]
-                    && playerChoices[checkWinner[2]] == playerChoices[checkWinner[0]]
-                    && playerChoices[checkWinner[0]] != Player.INPUT) {
-                if(currentPlayer == Player.TWO) {
-                    if(notTapped[tiTag - 1]) {
+            if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]
+                    && choicesByPlayer[checkWinner[1]] == choicesByPlayer[checkWinner[2]]
+                    && choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[0]]
+                    && choicesByPlayer[checkWinner[0]] != Variables.Player.INPUT) {
+                if(variables.getCurrentPlayer() == Variables.Player.TWO) {
+                    if(variables.getNotTapped(tiTag - 1)) {
                         setImage();
                         flag = false;
                         message = "Lion";
+                        winner = Variables.Player.TWO;
                         showMessage();
                         break;
                     }
                     flag = false;
                     message = "Tiger";
+                    winner = Variables.Player.ONE;
                 } else {
-                    if(notTapped[tiTag - 1]) {
+                    if(variables.getNotTapped(tiTag - 1)) {
                         setImage();
                         flag = false;
                         message = "Tiger";
+                        winner = Variables.Player.ONE;
                         showMessage();
                         break;
                     }
                     flag = false;
                     message = "Lion";
+                    winner = Variables.Player.TWO;
                 }
                 showMessage();
                 break;
@@ -207,6 +203,7 @@ public class PlayerActivity extends AppCompatActivity {
                     }
                 }
         ).show();
+        isDraw = true;
     }
 
     // reset game function to reset all the variables
@@ -216,17 +213,36 @@ public class PlayerActivity extends AppCompatActivity {
             imageView.setImageDrawable(null);
             imageView.setAlpha(0.2f);
         }
-        for(int i = 0; i < playerChoices.length; i++) {
-            playerChoices[i] = Player.INPUT;
-            notTapped[i] = true;
-        }
+        variables.playerChoicesInitializer();
+        variables.notTappedInitializer();
         flag = true;
         falseCount = 0;
         resetBtn.setVisibility(View.GONE);
         GameOver = false;
         showed = false;
-        currentPlayer = Player.ONE;
-        secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
-        firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+
+        if(isDraw) {
+            if(variables.getCurrentPlayer() == Variables.Player.ONE){
+                variables.setCurrentPlayer(Variables.Player.ONE);
+                secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+                firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            }
+            else{
+                variables.setCurrentPlayer(Variables.Player.TWO);
+                firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+                secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            }
+            isDraw = false;
+        } else {
+            if(winner == Variables.Player.TWO) {
+                variables.setCurrentPlayer(Variables.Player.TWO);
+                firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+                secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            } else {
+                variables.setCurrentPlayer(Variables.Player.ONE);
+                secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
+                firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+            }
+        }
     }
 }

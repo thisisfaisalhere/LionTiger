@@ -48,12 +48,15 @@ public class ExpertGameModeFragment extends Fragment {
     private int tiTag;
     private int icon;
     private String message;
+    private int turnNo;
+    private int helper;
 
     //UI components
     private Button resetBtnAndroid;
     private GridLayout gridLayout;
     private ImageView tappedImageView, imgOne, imgTwo, imgThree,
-            imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine, firstPlayerImg, secondPlayerImg;
+            imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine,
+            firstPlayerImg, secondPlayerImg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -171,13 +174,12 @@ public class ExpertGameModeFragment extends Fragment {
     }
 
     private void tappedOnImgViewEasy() {
-        //conditional statements for the game
-        if(yourTurn){
-            if(!GameOver) {
+        if (!GameOver) {
+            if (yourTurn) {
                 tiTag = Integer.parseInt(tappedImageView.getTag().toString());
-                if(notTapped[tiTag]) {
+                if (notTapped[tiTag]) {
                     playerChoices[tiTag] = currentPlayer;
-                    if(falseCount != notTapped.length - 1 )
+                    if (falseCount != notTapped.length - 1)
                         setImage();
                     else if (falseCount == 8) {
                         checkWinner();
@@ -199,19 +201,20 @@ public class ExpertGameModeFragment extends Fragment {
                 //iterating through the win cases array to find the winner
                 checkWinner();
             } else {
-                Toasty.warning(getContext(), "Game Over. Reset to Play Again",
+                Toasty.warning(getContext(), "Slow Down Bud.",
                         Toasty.LENGTH_SHORT, true).show();
             }
+        } else{
+            Toasty.warning(getContext(), "Game Over. Reset to Play Again",
+                    Toasty.LENGTH_SHORT, true).show();
         }
     }
 
     private void androidPlays() {
         if(!GameOver) {
-            int i = getGridLocation();
-            Log.i("tag3", "getRandomNo() called");
+            int i = 0;
             if(notTapped[i]) {
                 tiTag = i;
-                Log.i("tag", "randomNo generated is: " + tiTag);
                 playerChoices[tiTag] = currentPlayer;
                 setAndroidImg();
             } else androidPlays();
@@ -220,21 +223,20 @@ public class ExpertGameModeFragment extends Fragment {
         }
     }
 
-    private int getGridLocation(){
-        return 0;
-    }
-
     //this is a function to set image
     private void setImage() {
         icon = R.drawable.tiger;
         tappedImageView.setImageResource(icon);
         tappedImageView.setTranslationX(-2000);
-        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(100);
+        tappedImageView.animate().translationXBy(2000).alpha(1).setDuration(300);
         notTapped[tiTag] = false;
         currentPlayer = Player.TWO;
         falseCount++;
-        Log.i("tag2", "androidPlay() called");
         yourTurn = false;
+        turnNo++;
+        if(turnNo == 3 && tiTag%2 != 0) {
+            helper = tiTag;
+        }
         firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
                 R.color.rootLayoutColor));
         secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
@@ -245,7 +247,7 @@ public class ExpertGameModeFragment extends Fragment {
             public void run() {
                 androidPlays();
             }
-        }, 150);
+        }, 350);
     }
 
     private void setAndroidImg() {
@@ -257,8 +259,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgOne.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgOne.setTranslationX(2000);
-                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgOne, tiTag);
                 break;
             case 1:
@@ -267,8 +268,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgTwo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgTwo.setTranslationX(2000);
-                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgTwo, tiTag);
                 break;
             case 2:
@@ -277,8 +277,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgThree.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgThree.setTranslationX(2000);
-                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgThree, tiTag);
                 break;
             case 3:
@@ -287,8 +286,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgFour.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFour.setTranslationX(2000);
-                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgFour, tiTag);
                 break;
             case 4:
@@ -297,8 +295,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgFive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgFive.setTranslationX(2000);
-                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgFive, tiTag);
                 break;
             case 5:
@@ -307,8 +304,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgSix.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSix.setTranslationX(2000);
-                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgSix, tiTag);
                 break;
             case 6:
@@ -317,8 +313,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgSeven.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgSeven.setTranslationX(2000);
-                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgSeven, tiTag);
                 break;
             case 7:
@@ -327,8 +322,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgEight.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgEight.setTranslationX(2000);
-                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(500);
-                Log.i("tags", "i is: " + tiTag);
+                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgEight, tiTag);
                 break;
             case 8:
@@ -337,8 +331,7 @@ public class ExpertGameModeFragment extends Fragment {
                 gridLayout.setUseDefaultMargins(true);
                 imgNine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 imgNine.setTranslationX(2000);
-                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(100);
-                Log.i("tags", "i is: " + tiTag);
+                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(300);
                 gridLayout.addView(imgNine, tiTag);
                 break;
             default: break;
@@ -445,5 +438,10 @@ public class ExpertGameModeFragment extends Fragment {
         showed = false;
         currentPlayer = Player.ONE;
         yourTurn = true;
+        turnNo = 0;
+        firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.imageBackgroundColor));
+        secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(),
+                R.color.rootLayoutColor));
     }
 }

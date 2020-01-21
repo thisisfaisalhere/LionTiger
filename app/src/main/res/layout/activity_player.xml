@@ -11,7 +11,7 @@
         android:id="@+id/turnHighlightGrid"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,10 +36,10 @@
             android:id="@+id/vsImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/vs"
             app:layout_column="1"
             app:layout_row="0"
-            app:srcCompat="@drawable/vs"
-            android:contentDescription="@string/vs"/>
+            app:srcCompat="@drawable/vs" />
 
         <ImageView
             android:id="@+id/secondPlayer"
@@ -274,7 +274,7 @@
         android:id="@+id/resetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="30dp"
         android:background="#4CAF50"
         android:text="@string/reset"
         android:textColor="#F0FCCB"
