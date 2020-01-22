@@ -3,6 +3,9 @@ package com.virusx.lionortiger;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.gridlayout.widget.GridLayout;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +37,12 @@ public class PlayerActivity extends AppCompatActivity {
     private ImageView tappedImageView, firstPlayer, secondPlayer;
     private TextView scorePlayerOne, scorePlayerTwo, countDraw;
 
+    private SharedPreferences sharedPreferences;
+    private static final String prefName = "scores";
+    private static final String scoreOneKey = "playerOneScorePvP";
+    private static final String scoreTwoKey = "playerTwoScorePvP";
+    private static final String drawCountKey = "drawCountPvP";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +56,11 @@ public class PlayerActivity extends AppCompatActivity {
         scorePlayerTwo = findViewById(R.id.scorePlayerTwo);
         countDraw = findViewById(R.id.countDraw);
 
-        playerOneWinCount = 0;
-        playerTwoWinCount = 0;
-        drawCount = 0;
+        sharedPreferences = getSharedPreferences(prefName, MODE_APPEND);
+
+        playerOneWinCount = sharedPreferences.getInt(scoreOneKey, 0);
+        playerTwoWinCount = sharedPreferences.getInt(scoreTwoKey, 0);
+        drawCount = sharedPreferences.getInt(drawCountKey, 0);
 
         scorePlayerOne.setText(playerOneWinCount + "");
         scorePlayerTwo.setText(playerTwoWinCount + "");
@@ -71,6 +82,19 @@ public class PlayerActivity extends AppCompatActivity {
         variables = new Variables();
         variables.playerChoicesInitializer();
         variables.setCurrentPlayer(Variables.Player.ONE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sharedPreferences = getSharedPreferences("scores", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(scoreOneKey, playerOneWinCount);
+        editor.putInt(scoreTwoKey, playerTwoWinCount);
+        editor.putInt(drawCountKey, drawCount);
+
+        editor.apply();
     }
 
     public void tappedOnImgGrid(View imageView) {

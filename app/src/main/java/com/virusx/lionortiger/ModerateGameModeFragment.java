@@ -1,5 +1,7 @@
 package com.virusx.lionortiger;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -47,6 +49,12 @@ public class ModerateGameModeFragment extends Fragment {
             firstPlayerImg, secondPlayerImg;
     private TextView scorePlayerOne, scorePlayerTwo, countDraw;
 
+    private SharedPreferences sharedPreferences;
+    private static final String prefName = "scores";
+    private static final String scoreOneKey = "playerOneScorePvAMod";
+    private static final String scoreTwoKey = "playerTwoScorePvAMod";
+    private static final String drawCountKey = "drawCountPvAMod";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,9 +69,11 @@ public class ModerateGameModeFragment extends Fragment {
         scorePlayerTwo = view.findViewById(R.id.playerTwoScore);
         countDraw = view.findViewById(R.id.drawCountTxt);
 
-        playerOneWinCount = 0;
-        playerTwoWinCount = 0;
-        drawCount = 0;
+        sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_APPEND);
+
+        playerOneWinCount = sharedPreferences.getInt(scoreOneKey, 0);
+        playerTwoWinCount = sharedPreferences.getInt(scoreTwoKey, 0);
+        drawCount = sharedPreferences.getInt(drawCountKey, 0);
 
         scorePlayerOne.setText(playerOneWinCount + "");
         scorePlayerTwo.setText(playerTwoWinCount + "");
@@ -184,6 +194,19 @@ public class ModerateGameModeFragment extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPreferences = getContext().getSharedPreferences("scores", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(scoreOneKey, playerOneWinCount);
+        editor.putInt(scoreTwoKey, playerTwoWinCount);
+        editor.putInt(drawCountKey, drawCount);
+
+        editor.apply();
     }
 
     private void tappedOnImgView() {
