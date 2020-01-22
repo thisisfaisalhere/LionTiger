@@ -73,11 +73,15 @@ class GetGridLocation {
     }
 
     private int forTurnNoThree() {
-        return check();
+        int returnValue = goForWin();
+        if (!blocked) returnValue = check();
+        return returnValue;
     }
 
     private int forTurnNoFour() {
-        return check();
+        int returnValue = goForWin();
+        if (!blocked) returnValue = check();
+        return returnValue;
     }
 
     private int check() {
@@ -357,6 +361,37 @@ class GetGridLocation {
             }
         }
 
+        return returnValue;
+    }
+
+    private int goForWin() {
+        int[][] winCases = variables.getWinCases();
+        Variables.Player[] choicesByPlayer = variables.getPlayerChoices();
+        int returnValue = 0;
+        for(int[] checkWinner : winCases) {
+            if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]) {
+                if(choicesByPlayer[checkWinner[0]] == Variables.Player.TWO) {
+                    if(notTapped[2]) {
+                        blocked = true;
+                        return 2;
+                    } else continue;
+                }
+            } else if(choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[1]]) {
+                if(choicesByPlayer[checkWinner[1]] == Variables.Player.TWO) {
+                    if(notTapped[0]) {
+                        blocked = true;
+                        return  0;
+                    } else continue;
+                }
+            } else if(choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[0]]) {
+                if(choicesByPlayer[checkWinner[0]] == Variables.Player.TWO) {
+                    if(notTapped[1]) {
+                        blocked = true;
+                        return 1;
+                    } else continue;
+                }
+            }
+        }
         return returnValue;
     }
 
