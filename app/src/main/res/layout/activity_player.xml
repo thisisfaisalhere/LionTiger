@@ -8,9 +8,100 @@
     tools:context=".PlayerActivity">
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/scoreGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:columnCount="7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/turnHighlightGrid"
+        app:rowCount="1">
+
+        <ImageView
+            android:id="@+id/playerTwoImg"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/android"
+            android:padding="3dp"
+            android:paddingStart="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"
+            app:layout_column="3"
+            app:layout_row="0"
+            app:srcCompat="@drawable/lion" />
+
+        <ImageView
+            android:id="@+id/playerOneImg"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/tiger"
+            android:padding="3dp"
+            android:paddingStart="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"
+            app:layout_column="1"
+            app:layout_row="0"
+            app:srcCompat="@drawable/tiger" />
+
+        <TextView
+            android:id="@+id/winTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Wins: "
+            android:textColor="#fff"
+            android:textSize="24sp"
+            app:layout_column="0"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/scorePlayerOne"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            app:layout_column="2"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/scorePlayerTwo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            app:layout_column="4"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/countDraw"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            app:layout_column="6"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/drawTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Draws:"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            app:layout_column="5"
+            app:layout_row="0" />
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/turnHighlightGrid"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="195dp"
+        android:layout_height="65dp"
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,24 +109,24 @@
 
         <ImageView
             android:id="@+id/firstPlayer"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:contentDescription="@string/tiger"
-            android:padding="10dp"
-            android:paddingStart="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:padding="3dp"
+            android:paddingStart="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"
             app:layout_column="0"
             app:layout_row="0"
             app:srcCompat="@drawable/tiger" />
 
         <ImageView
             android:id="@+id/vsImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:contentDescription="@string/vs"
             app:layout_column="1"
             app:layout_row="0"
@@ -43,15 +134,15 @@
 
         <ImageView
             android:id="@+id/secondPlayer"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:contentDescription="@string/lion"
-            android:padding="10dp"
-            android:paddingStart="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
+            android:padding="3dp"
+            android:paddingStart="3dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:paddingRight="3dp"
             android:paddingBottom="10dp"
             app:layout_column="2"
             app:layout_row="0"
@@ -62,12 +153,12 @@
         android:id="@+id/grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:background="#CDDC39"
         app:columnCount="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/turnHighlightGrid"
+        app:layout_constraintTop_toBottomOf="@+id/scoreGrid"
         app:rowCount="3">
 
         <ImageView

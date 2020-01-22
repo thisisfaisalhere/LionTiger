@@ -20,8 +20,8 @@ public class TabAdapter extends FragmentPagerAdapter {
                 EasyGameModeFragment easyGameModeFragment = new EasyGameModeFragment();
                 return easyGameModeFragment;
             case 1:
-                ExpertGameModeFragment expertGameModeFragment = new ExpertGameModeFragment();
-                return expertGameModeFragment;
+                ModerateGameModeFragment moderateGameModeFragment = new ModerateGameModeFragment();
+                return moderateGameModeFragment;
             default:
                 return null;
         }
@@ -39,7 +39,7 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Easy";
             case 1:
-                return "Expert";
+                return "Moderate";
             default:
                 return null;
         }

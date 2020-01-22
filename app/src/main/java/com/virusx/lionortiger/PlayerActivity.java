@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -24,11 +26,13 @@ public class PlayerActivity extends AppCompatActivity {
     private Variables variables;
     private boolean isDraw = false;
     private Variables.Player winner;
+    private int playerOneWinCount, playerTwoWinCount, drawCount;
 
     //UI components
     private Button resetBtn;
     private GridLayout grid;
     private ImageView tappedImageView, firstPlayer, secondPlayer;
+    private TextView scorePlayerOne, scorePlayerTwo, countDraw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,18 @@ public class PlayerActivity extends AppCompatActivity {
         //initializing UI components
         resetBtn = findViewById(R.id.resetBtn);
         grid = findViewById(R.id.grid);
+
+        scorePlayerOne = findViewById(R.id.scorePlayerOne);
+        scorePlayerTwo = findViewById(R.id.scorePlayerTwo);
+        countDraw = findViewById(R.id.countDraw);
+
+        playerOneWinCount = 0;
+        playerTwoWinCount = 0;
+        drawCount = 0;
+
+        scorePlayerOne.setText(playerOneWinCount + "");
+        scorePlayerTwo.setText(playerTwoWinCount + "");
+        countDraw.setText(drawCount + "");
 
         firstPlayer = findViewById(R.id.firstPlayer);
         secondPlayer = findViewById(R.id.secondPlayer);
@@ -232,16 +248,22 @@ public class PlayerActivity extends AppCompatActivity {
                 firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
                 secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
             }
+            drawCount++;
+            countDraw.setText(drawCount + "");
             isDraw = false;
         } else {
             if(winner == Variables.Player.TWO) {
                 variables.setCurrentPlayer(Variables.Player.TWO);
                 firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
                 secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                playerTwoWinCount++;
+                scorePlayerTwo.setText(playerTwoWinCount + "");
             } else {
                 variables.setCurrentPlayer(Variables.Player.ONE);
                 secondPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.rootLayoutColor));
                 firstPlayer.setBackgroundColor(ContextCompat.getColor(this, R.color.imageBackgroundColor));
+                playerOneWinCount++;
+                scorePlayerOne.setText(playerOneWinCount + "");
             }
         }
     }

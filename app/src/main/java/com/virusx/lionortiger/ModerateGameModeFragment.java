@@ -11,15 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
-public class ExpertGameModeFragment extends Fragment {
+public class ModerateGameModeFragment extends Fragment {
 
 
-    public ExpertGameModeFragment() {
+    public ModerateGameModeFragment() {
         // Required empty public constructor
     }
 
@@ -36,6 +37,7 @@ public class ExpertGameModeFragment extends Fragment {
     private Variables.Player winner;
     private int turnNo;
     private int startedWith;
+    private int playerOneWinCount, playerTwoWinCount, drawCount;
 
     //UI components
     private Button resetBtnAndroid;
@@ -43,6 +45,7 @@ public class ExpertGameModeFragment extends Fragment {
     private ImageView tappedImageView, imgOne, imgTwo, imgThree,
             imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine,
             firstPlayerImg, secondPlayerImg;
+    private TextView scorePlayerOne, scorePlayerTwo, countDraw;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +56,18 @@ public class ExpertGameModeFragment extends Fragment {
         //initializing UI components
         resetBtnAndroid = view.findViewById(R.id.resetBtnAndroid);
         gridLayout = view.findViewById(R.id.gridAndroid);
+
+        scorePlayerOne = view.findViewById(R.id.playerOneScore);
+        scorePlayerTwo = view.findViewById(R.id.playerTwoScore);
+        countDraw = view.findViewById(R.id.drawCountTxt);
+
+        playerOneWinCount = 0;
+        playerTwoWinCount = 0;
+        drawCount = 0;
+
+        scorePlayerOne.setText(playerOneWinCount + "");
+        scorePlayerTwo.setText(playerTwoWinCount + "");
+        countDraw.setText(drawCount + "");
 
         /*added reset function to the reset button, resetTheGame()
             is a function to reset the game*/
@@ -456,6 +471,8 @@ public class ExpertGameModeFragment extends Fragment {
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 yourTurn = true;
                 isDraw = false;
+                drawCount++;
+                countDraw.setText(drawCount + "");
             }
             else{
                 variables.setCurrentPlayer(Variables.Player.TWO);
@@ -463,6 +480,9 @@ public class ExpertGameModeFragment extends Fragment {
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 isDraw = false;
+                drawCount++;
+                countDraw.setText(drawCount + "");
+                yourTurn = true;
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -470,7 +490,6 @@ public class ExpertGameModeFragment extends Fragment {
                         androidPlays();
                     }
                 }, 200);
-                yourTurn = true;
             }
         } else {
             if(winner == Variables.Player.TWO) {
@@ -479,19 +498,23 @@ public class ExpertGameModeFragment extends Fragment {
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 Handler handler = new Handler();
+                yourTurn = true;
+                playerTwoWinCount++;
+                scorePlayerTwo.setText(playerTwoWinCount + "");
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         androidPlays();
                     }
                 }, 200);
-                yourTurn = true;
             } else {
                 variables.setCurrentPlayer(Variables.Player.ONE);
-                 startedWith = 1;
+                startedWith = 1;
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 yourTurn = true;
+                playerOneWinCount++;
+                scorePlayerOne.setText(playerOneWinCount + "");
             }
         }
     }
