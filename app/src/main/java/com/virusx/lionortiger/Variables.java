@@ -52,6 +52,10 @@ class Variables {
         return notTapped[position];
     }
 
+    boolean[] getNotTappedArray() {
+        return notTapped;
+    }
+
     void playerChoicesInitializer() {
         for(int i = 0; i<playerChoices.length; i++) {
             playerChoices[i] = Player.INPUT;

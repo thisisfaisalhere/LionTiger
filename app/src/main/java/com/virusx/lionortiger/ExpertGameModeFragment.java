@@ -34,6 +34,8 @@ public class ExpertGameModeFragment extends Fragment {
     private Variables variables;
     private boolean isDraw = false;
     private Variables.Player winner;
+    private int turnNo;
+    private int startedWith;
 
     //UI components
     private Button resetBtnAndroid;
@@ -64,6 +66,7 @@ public class ExpertGameModeFragment extends Fragment {
         variables = new Variables();
         variables.playerChoicesInitializer();
         variables.setCurrentPlayer(Variables.Player.ONE);
+        startedWith = 1;
 
         imgOne = view.findViewById(R.id.imgOne);
         imgTwo = view.findViewById(R.id.imgTwo);
@@ -208,7 +211,7 @@ public class ExpertGameModeFragment extends Fragment {
     private void androidPlays() {
         if (!GameOver) {
             GetGridLocation getGridLocation = new GetGridLocation();
-            tiTag = getGridLocation.getRandomNo(2);
+            tiTag = getGridLocation.getLocation(turnNo, variables.getNotTappedArray(), variables.getPlayerChoices() , startedWith);
             if (variables.getNotTapped(tiTag)) {
                 variables.setPlayerChoice(variables.getCurrentPlayer(), tiTag);
                 if (falseCount != variables.notTappedLength() - 1)
@@ -242,6 +245,7 @@ public class ExpertGameModeFragment extends Fragment {
         variables.setCurrentPlayer(Variables.Player.TWO);
         falseCount++;
         yourTurn = false;
+        turnNo++;
         firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
         secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
         Handler handler = new Handler();
@@ -442,10 +446,12 @@ public class ExpertGameModeFragment extends Fragment {
         resetBtnAndroid.setVisibility(View.GONE);
         GameOver = false;
         showed = false;
+        turnNo = 0;
 
         if(isDraw) {
             if(variables.getCurrentPlayer() == Variables.Player.ONE){
                 variables.setCurrentPlayer(Variables.Player.ONE);
+                startedWith = 1;
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 yourTurn = true;
@@ -453,6 +459,7 @@ public class ExpertGameModeFragment extends Fragment {
             }
             else{
                 variables.setCurrentPlayer(Variables.Player.TWO);
+                startedWith = 2;
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 isDraw = false;
@@ -468,6 +475,7 @@ public class ExpertGameModeFragment extends Fragment {
         } else {
             if(winner == Variables.Player.TWO) {
                 variables.setCurrentPlayer(Variables.Player.TWO);
+                startedWith = 2;
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 Handler handler = new Handler();
@@ -480,6 +488,7 @@ public class ExpertGameModeFragment extends Fragment {
                 yourTurn = true;
             } else {
                 variables.setCurrentPlayer(Variables.Player.ONE);
+                 startedWith = 1;
                 secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
                 firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
                 yourTurn = true;
