@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.4.2'
     implementation 'com.github.mjn1369:prettydialog:1.0.4'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 }
 
 repositories {
