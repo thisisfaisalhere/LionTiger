@@ -69,7 +69,7 @@ public class ModerateGameModeFragment extends Fragment {
         scorePlayerTwo = view.findViewById(R.id.playerTwoScore);
         countDraw = view.findViewById(R.id.drawCountTxt);
 
-        sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_APPEND);
+        sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         playerOneWinCount = sharedPreferences.getInt(scoreOneKey, 0);
         playerTwoWinCount = sharedPreferences.getInt(scoreTwoKey, 0);
@@ -199,6 +199,7 @@ public class ModerateGameModeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
         sharedPreferences = getContext().getSharedPreferences("scores", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

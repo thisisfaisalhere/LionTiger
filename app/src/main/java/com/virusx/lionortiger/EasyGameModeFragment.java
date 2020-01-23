@@ -65,7 +65,7 @@ public class EasyGameModeFragment extends Fragment {
         scorePlayerTwo = view.findViewById(R.id.playerTwoScore);
         countDraw = view.findViewById(R.id.drawCountTxt);
 
-        sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_APPEND);
+        sharedPreferences = getContext().getSharedPreferences(prefName, Context.MODE_PRIVATE);
 
         playerOneWinCount = sharedPreferences.getInt(scoreOneKey, 0);
         playerTwoWinCount = sharedPreferences.getInt(scoreTwoKey, 0);

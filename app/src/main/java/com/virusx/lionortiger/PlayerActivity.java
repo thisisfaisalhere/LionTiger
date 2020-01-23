@@ -56,7 +56,7 @@ public class PlayerActivity extends AppCompatActivity {
         scorePlayerTwo = findViewById(R.id.scorePlayerTwo);
         countDraw = findViewById(R.id.countDraw);
 
-        sharedPreferences = getSharedPreferences(prefName, MODE_APPEND);
+        sharedPreferences = getSharedPreferences(prefName, MODE_PRIVATE);
 
         playerOneWinCount = sharedPreferences.getInt(scoreOneKey, 0);
         playerTwoWinCount = sharedPreferences.getInt(scoreTwoKey, 0);
