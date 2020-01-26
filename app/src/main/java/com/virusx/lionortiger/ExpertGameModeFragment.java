@@ -1,5 +1,6 @@
 package com.virusx.lionortiger;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.gridlayout.widget.GridLayout;
+
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +21,13 @@ import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
-public class ModerateGameModeFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ExpertGameModeFragment extends Fragment {
 
 
-    public ModerateGameModeFragment() {
+    public ExpertGameModeFragment() {
         // Required empty public constructor
     }
 
@@ -52,17 +57,17 @@ public class ModerateGameModeFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
     private static final String prefName = "scores";
-    private static final String scoreOneKey = "playerOneScorePvAMod";
-    private static final String scoreTwoKey = "playerTwoScorePvAMod";
-    private static final String drawCountKey = "drawCountPvAMod";
+    private static final String scoreOneKey = "playerOneScorePvAExpert";
+    private static final String scoreTwoKey = "playerTwoScorePvAExpert";
+    private static final String drawCountKey = "drawCountPvAExpert";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_layout, container, false);
 
-        //initializing UI components
         resetBtnAndroid = view.findViewById(R.id.resetBtnAndroid);
         gridLayout = view.findViewById(R.id.gridAndroid);
 
@@ -194,7 +199,7 @@ public class ModerateGameModeFragment extends Fragment {
             yourTurn = true;
         }
 
-        getGridLocation = new GetGridLocation(1);
+        getGridLocation = new GetGridLocation(2);
 
         return view;
     }
@@ -276,6 +281,46 @@ public class ModerateGameModeFragment extends Fragment {
         }
     }
 
+    //this is a function to check winner
+    private void checkWinner() {
+        int[][] winCases = variables.getWinCases();
+        Variables.Player[] choicesByPlayer = variables.getPlayerChoices();
+        for(int[] checkWinner : winCases) {
+            if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]
+                    && choicesByPlayer[checkWinner[1]] == choicesByPlayer[checkWinner[2]]
+                    && choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[0]]
+                    && choicesByPlayer[checkWinner[0]] != Variables.Player.INPUT) {
+                if(variables.getCurrentPlayer() == Variables.Player.TWO) {
+                    if(variables.getNotTapped(tiTag)) {
+                        setAndroidImg();
+                        flag = false;
+                        message = "android";
+                        winner = Variables.Player.TWO;
+                        showMessage();
+                        break;
+                    }
+                    flag = false;
+                    message = "Tiger";
+                    winner = Variables.Player.ONE;
+                } else {
+                    if(variables.getNotTapped(tiTag)) {
+                        setImage();
+                        flag = false;
+                        message = "Tiger";
+                        winner = Variables.Player.ONE;
+                        showMessage();
+                        break;
+                    }
+                    flag = false;
+                    message = "android";
+                    winner = Variables.Player.TWO;
+                }
+                showMessage();
+                break;
+            }
+        }
+    }
+
     //this is a function to set image
     private void setImage() {
         icon = R.drawable.tiger;
@@ -343,46 +388,6 @@ public class ModerateGameModeFragment extends Fragment {
         yourTurn = true;
         variables.setCurrentPlayer(Variables.Player.ONE);
         falseCount++;
-    }
-
-    //this is a function to check winner
-    private void checkWinner() {
-        int[][] winCases = variables.getWinCases();
-        Variables.Player[] choicesByPlayer = variables.getPlayerChoices();
-        for(int[] checkWinner : winCases) {
-            if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]
-                    && choicesByPlayer[checkWinner[1]] == choicesByPlayer[checkWinner[2]]
-                    && choicesByPlayer[checkWinner[2]] == choicesByPlayer[checkWinner[0]]
-                    && choicesByPlayer[checkWinner[0]] != Variables.Player.INPUT) {
-                if(variables.getCurrentPlayer() == Variables.Player.TWO) {
-                    if(variables.getNotTapped(tiTag)) {
-                        setAndroidImg();
-                        flag = false;
-                        message = "android";
-                        winner = Variables.Player.TWO;
-                        showMessage();
-                        break;
-                    }
-                    flag = false;
-                    message = "Tiger";
-                    winner = Variables.Player.ONE;
-                } else {
-                    if(variables.getNotTapped(tiTag)) {
-                        setImage();
-                        flag = false;
-                        message = "Tiger";
-                        winner = Variables.Player.ONE;
-                        showMessage();
-                        break;
-                    }
-                    flag = false;
-                    message = "android";
-                    winner = Variables.Player.TWO;
-                }
-                showMessage();
-                break;
-            }
-        }
     }
 
     //refactored code to show toast message

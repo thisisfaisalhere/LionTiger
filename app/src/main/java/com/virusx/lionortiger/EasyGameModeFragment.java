@@ -33,6 +33,7 @@ public class EasyGameModeFragment extends Fragment {
     private int icon;
     private String message;
     private Variables variables;
+    private GetGridLocation getGridLocation;
     private boolean isDraw = false;
     private Variables.Player winner;
     private int playerOneWinCount, playerTwoWinCount, drawCount;
@@ -42,7 +43,7 @@ public class EasyGameModeFragment extends Fragment {
     private GridLayout gridLayout;
     private ImageView tappedImageView, imgOne, imgTwo, imgThree,
             imgFour, imgFive, imgSix, imgSeven, imgEight, imgNine,
-            firstPlayerImg, secondPlayerImg;
+            firstPlayerImg, secondPlayerImg, reference;
     private TextView scorePlayerOne, scorePlayerTwo, countDraw;
 
     private SharedPreferences sharedPreferences;
@@ -188,6 +189,8 @@ public class EasyGameModeFragment extends Fragment {
             yourTurn = true;
         }
 
+        getGridLocation = new GetGridLocation(0);
+
         return view;
     }
 
@@ -243,7 +246,6 @@ public class EasyGameModeFragment extends Fragment {
 
     private void androidPlays() {
         if (!GameOver) {
-            GetGridLocation getGridLocation = new GetGridLocation();
             tiTag = getGridLocation.getRandomNo(2);
             if (variables.getNotTapped(tiTag)) {
                 variables.setPlayerChoice(variables.getCurrentPlayer(), tiTag);
@@ -293,88 +295,41 @@ public class EasyGameModeFragment extends Fragment {
         icon = R.drawable.android;
         switch (tiTag) {
             case 0:
-                gridLayout.removeView(imgOne);
-                imgOne.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgOne.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgOne.setTranslationX(2000);
-                imgOne.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgOne, tiTag);
+                reference = imgOne;
                 break;
             case 1:
-                gridLayout.removeView(imgTwo);
-                imgTwo.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgTwo.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgTwo.setTranslationX(2000);
-                imgTwo.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgTwo, tiTag);
+                reference = imgTwo;
                 break;
             case 2:
-                gridLayout.removeView(imgThree);
-                imgThree.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgThree.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgThree.setTranslationX(2000);
-                imgThree.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgThree, tiTag);
+                reference = imgThree;
                 break;
             case 3:
-                gridLayout.removeView(imgFour);
-                imgFour.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgFour.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgFour.setTranslationX(2000);
-                imgFour.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgFour, tiTag);
+                reference = imgFour;
                 break;
             case 4:
-                gridLayout.removeView(imgFive);
-                imgFive.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgFive.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgFive.setTranslationX(2000);
-                imgFive.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgFive, tiTag);
+                reference = imgFive;
                 break;
             case 5:
-                gridLayout.removeView(imgSix);
-                imgSix.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgSix.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgSix.setTranslationX(2000);
-                imgSix.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgSix, tiTag);
+                reference = imgSix;
                 break;
             case 6:
-                gridLayout.removeView(imgSeven);
-                imgSeven.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgSeven.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgSeven.setTranslationX(2000);
-                imgSeven.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgSeven, tiTag);
+                reference = imgSeven;
                 break;
             case 7:
-                gridLayout.removeView(imgEight);
-                imgEight.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgEight.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgEight.setTranslationX(2000);
-                imgEight.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgEight, tiTag);
+                reference = imgEight;
                 break;
             case 8:
-                gridLayout.removeView(imgNine);
-                imgNine.setImageResource(icon);
-                gridLayout.setUseDefaultMargins(true);
-                imgNine.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
-                imgNine.setTranslationX(2000);
-                imgNine.animate().translationXBy(-2000).alpha(1).setDuration(300);
-                gridLayout.addView(imgNine, tiTag);
+                reference = imgNine;
                 break;
             default: break;
         }
+        gridLayout.removeView(reference);
+        reference.setImageResource(icon);
+        gridLayout.setUseDefaultMargins(true);
+        reference.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
+        reference.setTranslationX(2000);
+        reference.animate().translationXBy(-2000).alpha(1).setDuration(300);
+        gridLayout.addView(reference, tiTag);
         firstPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.imageBackgroundColor));
         secondPlayerImg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rootLayoutColor));
         variables.setNotTapped(tiTag);

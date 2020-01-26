@@ -17,11 +17,11 @@ public class TabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                EasyGameModeFragment easyGameModeFragment = new EasyGameModeFragment();
-                return easyGameModeFragment;
+                return new EasyGameModeFragment();
             case 1:
-                ModerateGameModeFragment moderateGameModeFragment = new ModerateGameModeFragment();
-                return moderateGameModeFragment;
+                return new ModerateGameModeFragment();
+            case 2:
+                return new ExpertGameModeFragment();
             default:
                 return null;
         }
@@ -29,7 +29,7 @@ public class TabAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Nullable
@@ -40,6 +40,8 @@ public class TabAdapter extends FragmentPagerAdapter {
                 return "Easy";
             case 1:
                 return "Moderate";
+            case 2:
+                return "Expert";
             default:
                 return null;
         }
