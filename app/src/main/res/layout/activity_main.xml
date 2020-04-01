@@ -79,12 +79,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="casual"
                 android:padding="3dp"
-                android:text="@string/playerOneScore"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 app:layout_column="2"
-                app:layout_row="0"/>
+                app:layout_row="0" />
 
             <ImageView
                 android:id="@+id/playerTwoImg"
@@ -107,7 +106,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="casual"
                 android:padding="3dp"
-                android:text="@string/playerTwoScore"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="24sp"

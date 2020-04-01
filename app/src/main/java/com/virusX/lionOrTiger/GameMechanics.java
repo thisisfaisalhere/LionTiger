@@ -1,12 +1,10 @@
 package com.virusX.lionOrTiger;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.ImageView;
-
 import androidx.core.content.ContextCompat;
-
 import com.virusX.lionOrTiger.databinding.ActivityMainBinding;
-
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -16,8 +14,8 @@ class GameMechanics {
     private ActivityMainBinding binding;
     private Context context;
     private Board board;
-    private boolean gameOver;
-    private int tag, firstPlayerImg, secondPlayerImg;
+    private boolean isGameOver, isOnePlayerGame;
+    private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
     private Board.Player winnerPlayer;
 
     GameMechanics(ActivityMainBinding binding, Context context) {
@@ -27,16 +25,12 @@ class GameMechanics {
         board.setCurrentPlayer(Board.Player.ONE);
         board.notTappedInitializer();
         board.playerChoicesInitializer();
-        firstPlayerImg = R.drawable.tiger;
-        secondPlayerImg = R.drawable.lion;
-        binding.firstPlayerImg.setBackgroundColor(ContextCompat
-                .getColor(context, R.color.imageBackgroundColor));
-        binding.secondPlayerImg.setBackgroundColor(ContextCompat
-                .getColor(context, R.color.rootLayoutColor));
     }
 
-    void run(ImageView tappedImgView) {
-        if (!gameOver) {
+    void run(ImageView tappedImgView, boolean isOnePlayerGame, int strength) {
+        this.isOnePlayerGame = isOnePlayerGame;
+        this.strength = strength;
+        if (!isGameOver) {
             tag = Integer.parseInt(tappedImgView.getTag().toString());
             if (board.getNotTapped(tag - 1)) {
                 board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
@@ -66,7 +60,7 @@ class GameMechanics {
                     message = "Tiger is our Winner";
                 }
                 showMessage(winner, message);
-                gameOver = true;
+                isGameOver = true;
                 break;
             }
         }
@@ -83,6 +77,12 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.secondPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
+            if(isOnePlayerGame) {
+                AIPlays aiPlays = new AIPlays();
+                if(board.getNotTapped(aiPlays.getLocation(strength))) {
+                    setImage(tappedImg); //todo fix this
+                }
+            }
         } else if(board.getCurrentPlayer() == Board.Player.TWO) {
             img = secondPlayerImg;
             board.setCurrentPlayer(Board.Player.ONE);
@@ -115,6 +115,7 @@ class GameMechanics {
                 ).show();
     }
 
+    @SuppressLint("SetTextI18n")
     void resetTheGame() {
         for(int i = 0; i < binding.grid.getChildCount(); i++) {
             ImageView imageView = (ImageView) binding.grid.getChildAt(i);
@@ -123,15 +124,44 @@ class GameMechanics {
         }
         board.playerChoicesInitializer();
         board.notTappedInitializer();
-        gameOver = false;
+        isGameOver = false;
         if(winnerPlayer == Board.Player.TWO) {
             board.setCurrentPlayer(Board.Player.TWO);
             binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
             binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+            playerTwoScore++;
         } else {
             board.setCurrentPlayer(Board.Player.ONE);
             binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
             binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+            playerOneScore++;
         }
+        binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
+        binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
+    }
+
+    int getPlayerOneScore() {
+        return playerOneScore;
+    }
+
+    int getPlayerTwoScore() {
+        return playerTwoScore;
+    }
+
+    void setPlayerOneScore(int playerOneScore) {
+        this.playerOneScore = playerOneScore;
+    }
+
+    void setPlayerTwoScore(int playerTwoScore) {
+        this.playerTwoScore = playerTwoScore;
+    }
+
+    void setPlayerImg(int secondPlayerImg) {
+        this.firstPlayerImg = R.drawable.tiger;
+        this.secondPlayerImg = secondPlayerImg;
+        binding.firstPlayerImg.setBackgroundColor(ContextCompat
+                .getColor(context, R.color.imageBackgroundColor));
+        binding.secondPlayerImg.setBackgroundColor(ContextCompat
+                .getColor(context, R.color.rootLayoutColor));
     }
 }
