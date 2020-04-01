@@ -1,4 +1,4 @@
-package com.virusx.lionortiger;
+package com.virusX.lionOrTiger;
 
 import org.junit.Test;
 

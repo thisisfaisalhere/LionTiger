@@ -1,4 +1,4 @@
-package com.virusx.lionortiger;
+package com.virusX.lionOrTiger;
 
 class Variables {
 
