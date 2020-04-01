@@ -1,6 +1,8 @@
 package com.virusX.lionOrTiger;
 
-class Variables {
+import java.util.Arrays;
+
+class Board {
 
     enum Player {
         ONE, TWO, INPUT
@@ -57,14 +59,10 @@ class Variables {
     }
 
     void playerChoicesInitializer() {
-        for(int i = 0; i<playerChoices.length; i++) {
-            playerChoices[i] = Player.INPUT;
-        }
+        Arrays.fill(playerChoices, Player.INPUT);
     }
 
     void notTappedInitializer() {
-        for (int i = 0; i < notTapped.length; i++) {
-            notTapped[i] = true;
-        }
+        Arrays.fill(notTapped, true);
     }
 }
