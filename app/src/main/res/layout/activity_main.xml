@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,8 +11,8 @@
 
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/turnHighlightGrid"
-            android:layout_width="195dp"
-            android:layout_height="65dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -19,17 +20,17 @@
 
             <ImageView
                 android:id="@+id/firstPlayerImg"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:contentDescription="@string/lion_or_tiger"
+                android:padding="5dp"
                 app:layout_column="0"
-                app:layout_row="0"
-                app:srcCompat="@drawable/tiger" />
+                app:layout_row="0" />
 
             <ImageView
                 android:id="@+id/vsImg"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:contentDescription="@string/vs"
                 app:layout_column="1"
                 app:layout_row="0"
@@ -37,19 +38,12 @@
 
             <ImageView
                 android:id="@+id/secondPlayerImg"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:contentDescription="@string/lion"
-                android:padding="3dp"
-                android:paddingStart="3dp"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="3dp"
-                android:paddingRight="3dp"
-                android:paddingBottom="10dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:contentDescription="@string/lion_or_tiger"
+                android:padding="5dp"
                 app:layout_column="2"
-                app:layout_row="0"
-                app:srcCompat="@drawable/lion" />
+                app:layout_row="0" />
 
         </androidx.gridlayout.widget.GridLayout>
 
@@ -64,17 +58,6 @@
             app:layout_constraintTop_toBottomOf="@+id/turnHighlightGrid"
             app:rowCount="1">
 
-            <TextView
-                android:id="@+id/winTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:padding="3dp"
-                android:text="@string/wins"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="24sp" />
-
             <ImageView
                 android:id="@+id/playerOneImg"
                 android:layout_width="45dp"
@@ -88,8 +71,7 @@
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
                 app:layout_column="1"
-                app:layout_row="0"
-                app:srcCompat="@drawable/tiger" />
+                app:layout_row="0"/>
 
             <TextView
                 android:id="@+id/scorePlayerOne"
@@ -102,7 +84,7 @@
                 android:textColor="#fff"
                 android:textSize="24sp"
                 app:layout_column="2"
-                app:layout_row="0" />
+                app:layout_row="0"/>
 
             <ImageView
                 android:id="@+id/playerTwoImg"
@@ -117,8 +99,7 @@
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
                 app:layout_column="3"
-                app:layout_row="0"
-                app:srcCompat="@drawable/lion" />
+                app:layout_row="0"/>
 
             <TextView
                 android:id="@+id/scorePlayerTwo"
@@ -131,32 +112,6 @@
                 android:textColor="#fff"
                 android:textSize="24sp"
                 app:layout_column="4"
-                app:layout_row="0" />
-
-            <TextView
-                android:id="@+id/drawTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:padding="3dp"
-                android:text="@string/draws"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                app:layout_column="5"
-                app:layout_row="0" />
-
-            <TextView
-                android:id="@+id/countDraw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:padding="3dp"
-                android:text="@string/drawCount"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                app:layout_column="6"
                 app:layout_row="0" />
 
         </androidx.gridlayout.widget.GridLayout>

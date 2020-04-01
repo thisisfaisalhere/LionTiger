@@ -25,9 +25,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (checkedId) {
                     case R.id.onePlayerRBtn:
                         binding.gameStrengthRGrp.setVisibility(View.VISIBLE);
+                        binding.firstPlayerImg.setImageResource(R.drawable.tiger);
+                        binding.playerOneImg.setImageResource(R.drawable.tiger);
+                        binding.secondPlayerImg.setImageResource(R.drawable.android);
+                        binding.playerTwoImg.setImageResource(R.drawable.android);
                         break;
                     case R.id.twoPlayerRBtn:
                         binding.gameStrengthRGrp.setVisibility(View.GONE);
+                        setImage();
                         break;
                     default:
                         break;
@@ -54,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if(binding.twoPlayerRBtn.isChecked()) {
+            setImage();
+        }
+
         binding.resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +73,28 @@ public class MainActivity extends AppCompatActivity {
         gameMechanics = new GameMechanics(binding, this);
     }
 
+    private void setImage() {
+        binding.firstPlayerImg.setImageResource(R.drawable.tiger);
+        binding.playerOneImg.setImageResource(R.drawable.tiger);
+        binding.secondPlayerImg.setImageResource(R.drawable.lion);
+        binding.playerTwoImg.setImageResource(R.drawable.lion);
+    }
+
     public void tappedOnGrid(View tappedView) {
         ImageView tappedImgView = (ImageView) tappedView;
         gameMechanics.run(tappedImgView);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideSystemUI();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        gameMechanics.resetTheGame();
     }
 
     @Override
