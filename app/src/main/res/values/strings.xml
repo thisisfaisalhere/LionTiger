@@ -9,20 +9,18 @@
     <string name="vs">vs</string>
     <string name="lion">lion</string>
     <string name="android">android</string>
-
-    <!--    parse server details-->
-    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
-    <string name="back4app_app_id">ZruzzKV4woHt4ozO8cojzzJ5DOVMZ0BSxhXqhwwu</string>
-    <string name="back4app_client_key">KmlnXdxlu2IaeClhnaygjcMKb10uBXcvCAZIiw0z</string>
     <string name="wins">Wins:</string>
-    <string name="draws">Draws:</string>
     <string name="playerOneScore">10</string>
     <string name="playerTwoScore">10</string>
-    <string name="drawCount">10</string>
     <string name="onePlayerTxt">1 Player</string>
     <string name="easyTxt">Easy</string>
     <string name="moderateTxt">Moderate</string>
     <string name="expertTxt">Expert</string>
     <string name="twoPlayerTxt">2 Player</string>
+
+    <!--    parse server details-->
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">ZruzzKV4woHt4ozO8cojzzJ5DOVMZ0BSxhXqhwwu</string>
+    <string name="back4app_client_key">KmlnXdxlu2IaeClhnaygjcMKb10uBXcvCAZIiw0z</string>
 
 </resources>

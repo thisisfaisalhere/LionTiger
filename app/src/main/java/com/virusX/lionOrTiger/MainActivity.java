@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -26,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String PLAYER_TWO_SCORE_PVA = "playerTwoScorePvA";
     private int playerOneScorePvP, playerTwoScorePvP, playerOneScorePvA, playerTwoScorePvA;
     private boolean isOnePlayerGame;
+    private final String TAG = "LionTiger";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        gameMechanics = new GameMechanics(binding, this);
         sharedPreferences = getSharedPreferences(prefName, MODE_PRIVATE);
 
         binding.gameTypeRGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
+                gameMechanics.resetTheGame();
+                saveScore();
             }
         });
 
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
+                gameMechanics.resetTheGame();
             }
         });
 
@@ -78,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        gameMechanics = new GameMechanics(binding, this);
+        binding.resetScoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetScore();
+            }
+        });
 
         if(binding.twoPlayerRBtn.isChecked()) {
             initTwoPlayerGame();
@@ -99,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
         playerOneScorePvA = sharedPreferences.getInt(PLAYER_ONE_SCORE_PVA, 0);
         playerTwoScorePvA = sharedPreferences.getInt(PLAYER_TWO_SCORE_PVA, 0);
+
+        playerOneScorePvP = gameMechanics.getPlayerOneScore();
+        playerTwoScorePvP = gameMechanics.getPlayerTwoScore();
 
         binding.scorePlayerOne.setText(Integer.toString(playerOneScorePvA));
         binding.scorePlayerTwo.setText(Integer.toString(playerTwoScorePvA));
@@ -121,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
         playerOneScorePvP = sharedPreferences.getInt(PLAYER_ONE_SCORE_PVP, 0);
         playerTwoScorePvP = sharedPreferences.getInt(PLAYER_TWO_SCORE_PVP, 0);
 
+        playerOneScorePvA = gameMechanics.getPlayerOneScore();
+        playerTwoScorePvA = gameMechanics.getPlayerTwoScore();
+
         binding.scorePlayerOne.setText(Integer.toString(playerOneScorePvP));
         binding.scorePlayerTwo.setText(Integer.toString(playerTwoScorePvP));
 
@@ -132,14 +149,17 @@ public class MainActivity extends AppCompatActivity {
         isOnePlayerGame = false;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    @SuppressLint("SetTextI18n")
+    private void resetScore() {
+        gameMechanics.setPlayerOneScore(0);
+        gameMechanics.setPlayerTwoScore(0);
+        binding.scorePlayerOne.setText(0 + "");
+        binding.scorePlayerTwo.setText(0 + "");
+    }
+
+    void saveScore() {
         sharedPreferences = getSharedPreferences(prefName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        playerOneScorePvP = gameMechanics.getPlayerOneScore();
-        playerTwoScorePvP = gameMechanics.getPlayerTwoScore();
 
         editor.putInt(PLAYER_ONE_SCORE_PVP, playerOneScorePvP);
         editor.putInt(PLAYER_TWO_SCORE_PVP, playerTwoScorePvP);
@@ -148,6 +168,16 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt(PLAYER_TWO_SCORE_PVA, playerTwoScorePvA);
 
         editor.apply();
+
+        Log.d(TAG, "PvP:" + playerOneScorePvP + " " + playerTwoScorePvP);
+        Log.d(TAG, "PvA:" + playerOneScorePvA + " " + playerTwoScorePvA);
+        Log.d(TAG, "score saved");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveScore();
     }
 
     @Override

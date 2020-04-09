@@ -2,9 +2,14 @@ package com.virusX.lionOrTiger;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
+
 import androidx.core.content.ContextCompat;
+
 import com.virusX.lionOrTiger.databinding.ActivityMainBinding;
+
 import es.dmoral.toasty.Toasty;
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
@@ -14,9 +19,10 @@ class GameMechanics {
     private ActivityMainBinding binding;
     private Context context;
     private Board board;
-    private boolean isGameOver, isOnePlayerGame;
+    private boolean isGameOver, isOnePlayerGame, messageShowed, yourTurn;
     private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
     private Board.Player winnerPlayer;
+    private final String TAG = "LionTiger";
 
     GameMechanics(ActivityMainBinding binding, Context context) {
         this.binding = binding;
@@ -30,13 +36,16 @@ class GameMechanics {
     void run(ImageView tappedImgView, boolean isOnePlayerGame, int strength) {
         this.isOnePlayerGame = isOnePlayerGame;
         this.strength = strength;
+        if(!isOnePlayerGame) yourTurn = true;
         if (!isGameOver) {
-            tag = Integer.parseInt(tappedImgView.getTag().toString());
-            if (board.getNotTapped(tag - 1)) {
-                board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
-                setImage(tappedImgView);
-                checkWinner();
-            } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
+            if(yourTurn) {
+                tag = Integer.parseInt(tappedImgView.getTag().toString());
+                if (board.getNotTapped(tag - 1)) {
+                    board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
+                    setImage(tappedImgView);
+                    Log.d(TAG, tag - 1 + "");
+                } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
+            } else Toasty.warning(context, "Slow down Bud", Toasty.LENGTH_SHORT, true).show();
         } else Toasty.warning(context, "Game Over. Reset to Play Again", Toasty.LENGTH_SHORT, true).show();
     }
 
@@ -46,7 +55,6 @@ class GameMechanics {
         for(int[] checkWinner : winCases) {
             if(choicesByPlayer[checkWinner[0]] == choicesByPlayer[checkWinner[1]]
                     && choicesByPlayer[checkWinner[1]] == choicesByPlayer[checkWinner[2]]
-
                     && choicesByPlayer[checkWinner[0]] != Board.Player.INPUT) {
                 int winner;
                 String message;
@@ -54,6 +62,7 @@ class GameMechanics {
                     winner = secondPlayerImg;
                     winnerPlayer = Board.Player.TWO;
                     message = "Lion is our Winner";
+                    if(isOnePlayerGame) message = "android is our Winner";
                 } else {
                     winner = firstPlayerImg;
                     winnerPlayer = Board.Player.ONE;
@@ -78,10 +87,15 @@ class GameMechanics {
             binding.secondPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
             if(isOnePlayerGame) {
-                AIPlays aiPlays = new AIPlays();
-                if(board.getNotTapped(aiPlays.getLocation(strength))) {
-                    setImage(tappedImg); //todo fix this
-                }
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        yourTurn = false;
+                        checkWinner();
+                        androidPlays();
+                    }
+                }, 350);
             }
         } else if(board.getCurrentPlayer() == Board.Player.TWO) {
             img = secondPlayerImg;
@@ -93,26 +107,91 @@ class GameMechanics {
             binding.firstPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
         }
+        checkWinner();
         tappedImg.setImageResource(img);
         tappedImg.setTranslationX(translationValue);
         tappedImg.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
         board.setNotTapped(tag - 1);
     }
 
+    private void androidPlays() {
+        if (!isGameOver) {
+            AIPlays aiPlays = new AIPlays();
+            int location = aiPlays.getLocation(strength);
+            if (board.getNotTapped(location - 1)) {
+                Log.d(TAG, location - 1 + "");
+                board.setPlayerChoice(board.getCurrentPlayer(), location - 1);
+                setAndroidImage(location - 1);
+            } else androidPlays();
+        }
+    }
+
+    private void setAndroidImage(int location) {
+        board.setCurrentPlayer(Board.Player.ONE);
+        ImageView imageView;
+        switch (location) {
+            case 0:
+                imageView = binding.img1;
+                break;
+            case 1:
+                imageView = binding.img2;
+                break;
+            case 2:
+                imageView = binding.img3;
+                break;
+            case 3:
+                imageView = binding.img4;
+                break;
+            case 4:
+                imageView = binding.img5;
+                break;
+            case 5:
+                imageView = binding.img6;
+                break;
+            case 6:
+                imageView = binding.img7;
+                break;
+            case 7:
+                imageView = binding.img8;
+                break;
+            case 8:
+                imageView = binding.img9;
+                break;
+            default:
+                imageView = null;
+        }
+        checkWinner();
+        binding.grid.removeView(imageView);
+        assert imageView != null;
+        imageView.setImageResource(secondPlayerImg);
+        binding.grid.setUseDefaultMargins(true);
+        imageView.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+        imageView.setTranslationX(2000);
+        imageView.animate().translationXBy(-2000).alpha(1).setDuration(300);
+        binding.grid.addView(imageView, location);
+        binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+        binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
+        board.setNotTapped(location);
+        yourTurn = true;
+    }
+
     private void showMessage(int winner, String message) {
-        final PrettyDialog prettyDialog = new PrettyDialog(context);
-        prettyDialog.setIcon(winner).setTitle(message)
-                .addButton("Reset Game",
-                        R.color.pdlg_color_white,
-                        R.color.pdlg_color_green,
-                        new PrettyDialogCallback() {
-                            @Override
-                            public void onClick() {
-                                resetTheGame();
-                                prettyDialog.dismiss();
+        if(!messageShowed) {
+            final PrettyDialog prettyDialog = new PrettyDialog(context);
+            prettyDialog.setIcon(winner).setTitle(message)
+                    .addButton("Reset Game",
+                            R.color.pdlg_color_white,
+                            R.color.pdlg_color_green,
+                            new PrettyDialogCallback() {
+                                @Override
+                                public void onClick() {
+                                    resetTheGame();
+                                    prettyDialog.dismiss();
+                                }
                             }
-                        }
-                ).show();
+                    ).show();
+            messageShowed = true;
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -124,20 +203,26 @@ class GameMechanics {
         }
         board.playerChoicesInitializer();
         board.notTappedInitializer();
-        isGameOver = false;
-        if(winnerPlayer == Board.Player.TWO) {
-            board.setCurrentPlayer(Board.Player.TWO);
-            binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
-            binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
-            playerTwoScore++;
-        } else {
-            board.setCurrentPlayer(Board.Player.ONE);
-            binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
-            binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
-            playerOneScore++;
+        messageShowed = false;
+
+        if(isGameOver) {
+            if(winnerPlayer == Board.Player.TWO) {
+                board.setCurrentPlayer(Board.Player.TWO);
+                binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
+                binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+                playerTwoScore++;
+                if(isOnePlayerGame) androidPlays();
+            } else {
+                board.setCurrentPlayer(Board.Player.ONE);
+                binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
+                binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
+                playerOneScore++;
+                yourTurn = true;
+            }
+            binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
+            binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
+            isGameOver = false;
         }
-        binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
-        binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
     }
 
     int getPlayerOneScore() {

@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            app:columnCount="7"
+            app:columnCount="6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/turnHighlightGrid"
@@ -61,7 +61,7 @@
             <ImageView
                 android:id="@+id/playerOneImg"
                 android:layout_width="45dp"
-                android:layout_height="46dp"
+                android:layout_height="45dp"
                 android:contentDescription="@string/tiger"
                 android:padding="3dp"
                 android:paddingStart="3dp"
@@ -71,7 +71,7 @@
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
                 app:layout_column="1"
-                app:layout_row="0"/>
+                app:layout_row="0" />
 
             <TextView
                 android:id="@+id/scorePlayerOne"
@@ -88,7 +88,7 @@
             <ImageView
                 android:id="@+id/playerTwoImg"
                 android:layout_width="45dp"
-                android:layout_height="46dp"
+                android:layout_height="45dp"
                 android:contentDescription="@string/android"
                 android:padding="3dp"
                 android:paddingStart="3dp"
@@ -98,7 +98,7 @@
                 android:paddingRight="3dp"
                 android:paddingBottom="3dp"
                 app:layout_column="3"
-                app:layout_row="0"/>
+                app:layout_row="0" />
 
             <TextView
                 android:id="@+id/scorePlayerTwo"
@@ -111,6 +111,14 @@
                 android:textSize="24sp"
                 app:layout_column="4"
                 app:layout_row="0" />
+
+            <ImageButton
+                android:id="@+id/resetScoreBtn"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="#009688"
+                android:contentDescription="@string/reset"
+                app:srcCompat="@drawable/reset" />
 
         </androidx.gridlayout.widget.GridLayout>
 
