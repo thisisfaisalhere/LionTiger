@@ -19,7 +19,7 @@ class GameMechanics {
     private ActivityMainBinding binding;
     private Context context;
     private Board board;
-    private boolean isGameOver, isOnePlayerGame, messageShowed, yourTurn;
+    private boolean isGameOver, isOnePlayerGame, yourTurn = true;
     private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
     private Board.Player winnerPlayer;
     private final String TAG = "LionTiger";
@@ -36,7 +36,6 @@ class GameMechanics {
     void run(ImageView tappedImgView, boolean isOnePlayerGame, int strength) {
         this.isOnePlayerGame = isOnePlayerGame;
         this.strength = strength;
-        if(!isOnePlayerGame) yourTurn = true;
         if (!isGameOver) {
             if(yourTurn) {
                 tag = Integer.parseInt(tappedImgView.getTag().toString());
@@ -86,16 +85,16 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.secondPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
+            checkWinner();
             if(isOnePlayerGame) {
+                yourTurn = false;
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        yourTurn = false;
-                        checkWinner();
                         androidPlays();
                     }
-                }, 350);
+                }, 300);
             }
         } else if(board.getCurrentPlayer() == Board.Player.TWO) {
             img = secondPlayerImg;
@@ -106,8 +105,8 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.firstPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
+            checkWinner();
         }
-        checkWinner();
         tappedImg.setImageResource(img);
         tappedImg.setTranslationX(translationValue);
         tappedImg.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
@@ -161,37 +160,34 @@ class GameMechanics {
                 imageView = null;
         }
         checkWinner();
+        yourTurn = true;
         binding.grid.removeView(imageView);
         assert imageView != null;
         imageView.setImageResource(secondPlayerImg);
         binding.grid.setUseDefaultMargins(true);
         imageView.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         imageView.setTranslationX(2000);
-        imageView.animate().translationXBy(-2000).alpha(1).setDuration(300);
+        imageView.animate().translationXBy(-2000).alpha(1).setDuration(500);
         binding.grid.addView(imageView, location);
         binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
         board.setNotTapped(location);
-        yourTurn = true;
     }
 
     private void showMessage(int winner, String message) {
-        if(!messageShowed) {
-            final PrettyDialog prettyDialog = new PrettyDialog(context);
-            prettyDialog.setIcon(winner).setTitle(message)
-                    .addButton("Reset Game",
-                            R.color.pdlg_color_white,
-                            R.color.pdlg_color_green,
-                            new PrettyDialogCallback() {
-                                @Override
-                                public void onClick() {
-                                    resetTheGame();
-                                    prettyDialog.dismiss();
-                                }
+        final PrettyDialog prettyDialog = new PrettyDialog(context);
+        prettyDialog.setIcon(winner).setTitle(message)
+                .addButton("Reset Game",
+                        R.color.pdlg_color_white,
+                        R.color.pdlg_color_green,
+                        new PrettyDialogCallback() {
+                            @Override
+                            public void onClick() {
+                                resetTheGame();
+                                prettyDialog.dismiss();
                             }
-                    ).show();
-            messageShowed = true;
-        }
+                        }
+                ).show();
     }
 
     @SuppressLint("SetTextI18n")
@@ -203,26 +199,27 @@ class GameMechanics {
         }
         board.playerChoicesInitializer();
         board.notTappedInitializer();
-        messageShowed = false;
 
         if(isGameOver) {
+            isGameOver = false;
             if(winnerPlayer == Board.Player.TWO) {
                 board.setCurrentPlayer(Board.Player.TWO);
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
                 binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerTwoScore++;
-                if(isOnePlayerGame) androidPlays();
+                if(isOnePlayerGame) {
+                    androidPlays();
+                }
             } else {
                 board.setCurrentPlayer(Board.Player.ONE);
                 binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerOneScore++;
-                yourTurn = true;
             }
             binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
             binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
-            isGameOver = false;
         }
+        yourTurn = true;
     }
 
     int getPlayerOneScore() {

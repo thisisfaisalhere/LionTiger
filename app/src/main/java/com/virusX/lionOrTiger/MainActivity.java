@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         gameMechanics = new GameMechanics(binding, this);
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 gameMechanics.resetTheGame();
+                Log.d(TAG, "Game Type Chosen");
                 saveScore();
             }
         });
