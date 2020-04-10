@@ -20,7 +20,7 @@ class GameMechanics {
     private Context context;
     private Board board;
     private boolean isGameOver, isOnePlayerGame, yourTurn = true;
-    private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
+    private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength, startedWith = 1, turnNo;
     private Board.Player winnerPlayer;
     private final String TAG = "LionTiger";
 
@@ -85,6 +85,8 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.secondPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
+            board.setNotTapped(tag - 1);
+            turnNo++;
             checkWinner();
             if(isOnePlayerGame) {
                 yourTurn = false;
@@ -105,18 +107,19 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.firstPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
+            board.setNotTapped(tag - 1);
             checkWinner();
         }
         tappedImg.setImageResource(img);
         tappedImg.setTranslationX(translationValue);
         tappedImg.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
-        board.setNotTapped(tag - 1);
     }
 
     private void androidPlays() {
-        if (!isGameOver) {
-            AIPlays aiPlays = new AIPlays();
-            int location = aiPlays.getLocation(strength);
+        Log.d(TAG, "androidPlays: is called");
+        AIPlays aiPlays = new AIPlays(board);
+        int location = aiPlays.getLocation(strength, startedWith, turnNo);
+        if(board.isSpaceAvailable()) {
             if (board.getNotTapped(location - 1)) {
                 Log.d(TAG, location - 1 + "");
                 board.setPlayerChoice(board.getCurrentPlayer(), location - 1);
@@ -199,6 +202,7 @@ class GameMechanics {
         }
         board.playerChoicesInitializer();
         board.notTappedInitializer();
+        turnNo = 0;
 
         if(isGameOver) {
             isGameOver = false;
@@ -208,6 +212,7 @@ class GameMechanics {
                 binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerTwoScore++;
                 if(isOnePlayerGame) {
+                    startedWith = 2;
                     androidPlays();
                 }
             } else {
@@ -215,9 +220,12 @@ class GameMechanics {
                 binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerOneScore++;
+                if(isOnePlayerGame) startedWith = 1;
             }
             binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
             binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
+        } else {
+            board.setCurrentPlayer(Board.Player.ONE);
         }
         yourTurn = true;
     }

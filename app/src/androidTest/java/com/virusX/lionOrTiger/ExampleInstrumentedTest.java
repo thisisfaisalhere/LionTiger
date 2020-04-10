@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.virusx.lionortiger", appContext.getPackageName());
+        assertEquals("com.virus_x.lionortiger", appContext.getPackageName());
     }
 }
