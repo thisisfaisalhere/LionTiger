@@ -411,11 +411,11 @@
 
         <Button
             android:id="@+id/resetBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:background="#4CAF50"
-            android:fontFamily="sans-serif"
+            android:fontFamily="casual"
             android:shadowColor="#FFFFFF"
             android:text="@string/reset"
             android:textColor="#F0FCCB"

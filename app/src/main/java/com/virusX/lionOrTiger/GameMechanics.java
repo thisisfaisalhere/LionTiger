@@ -19,7 +19,7 @@ class GameMechanics {
     private ActivityMainBinding binding;
     private Context context;
     private Board board;
-    private boolean isGameOver, isOnePlayerGame, yourTurn = true;
+    private boolean isOnePlayerGame, yourTurn = true;
     private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
     private Board.Player winnerPlayer;
     private final String TAG = "LionTiger";
@@ -36,15 +36,17 @@ class GameMechanics {
     void run(ImageView tappedImgView, boolean isOnePlayerGame, int strength) {
         this.isOnePlayerGame = isOnePlayerGame;
         this.strength = strength;
-        if (!isGameOver) {
-            if(yourTurn) {
-                tag = Integer.parseInt(tappedImgView.getTag().toString());
-                if (board.getNotTapped(tag - 1)) {
-                    board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
-                    setImage(tappedImgView);
-                    Log.d(TAG, tag - 1 + "");
-                } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
-            } else Toasty.warning(context, "Slow down Bud", Toasty.LENGTH_SHORT, true).show();
+        if (!board.isGameOver()) {
+            if(board.isSpaceAvailable()) {
+                if(yourTurn) {
+                    tag = Integer.parseInt(tappedImgView.getTag().toString());
+                    if (board.getNotTapped(tag - 1)) {
+                        board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
+                        setImage(tappedImgView);
+                        Log.d(TAG, tag - 1 + "");
+                    } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
+                } else Toasty.warning(context, "Slow down Bud", Toasty.LENGTH_SHORT, true).show();
+            } else board.setGameOver(true);
         } else Toasty.warning(context, "Game Over. Reset to Play Again", Toasty.LENGTH_SHORT, true).show();
     }
 
@@ -68,7 +70,7 @@ class GameMechanics {
                     message = "Tiger is our Winner";
                 }
                 showMessage(winner, message);
-                isGameOver = true;
+                board.setGameOver(true);
                 break;
             }
         }
@@ -76,6 +78,7 @@ class GameMechanics {
 
     private void setImage(ImageView tappedImg) {
         int translationValue = 0, translationXByValue = 0, img = 0;
+        board.setNotTapped(tag - 1);
         if(board.getCurrentPlayer() == Board.Player.ONE) {
             img = firstPlayerImg;
             board.setCurrentPlayer(Board.Player.TWO);
@@ -85,7 +88,6 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.secondPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
-            board.setNotTapped(tag - 1);
             checkWinner();
             if(isOnePlayerGame) {
                 yourTurn = false;
@@ -95,7 +97,7 @@ class GameMechanics {
                     public void run() {
                         androidPlays();
                     }
-                }, 300);
+                }, 100);
             }
         } else if(board.getCurrentPlayer() == Board.Player.TWO) {
             img = secondPlayerImg;
@@ -106,7 +108,6 @@ class GameMechanics {
                     .getColor(context, R.color.rootLayoutColor));
             binding.firstPlayerImg.setBackgroundColor(ContextCompat
                     .getColor(context, R.color.imageBackgroundColor));
-            board.setNotTapped(tag - 1);
             checkWinner();
         }
         tappedImg.setImageResource(img);
@@ -116,16 +117,18 @@ class GameMechanics {
 
     private void androidPlays() {
         Log.d(TAG, "androidPlays: is called");
-        if(!isGameOver) {
-            AIPlays aiPlays = new AIPlays(board);
-            int location = aiPlays.getLocation(strength);
+        if(!board.isGameOver()) {
             if(board.isSpaceAvailable()) {
-                if (board.getNotTapped(location - 1)) {
-                    Log.d(TAG, location - 1 + "");
-                    board.setPlayerChoice(board.getCurrentPlayer(), location - 1);
-                    setAndroidImage(location - 1);
-                } else androidPlays();
-            }
+                AIPlays aiPlays = new AIPlays(board);
+                int location = aiPlays.getLocation(strength);
+                if(board.isSpaceAvailable()) {
+                    if (board.getNotTapped(location - 1)) {
+                        Log.d(TAG, location - 1 + "");
+                        board.setPlayerChoice(board.getCurrentPlayer(), location - 1);
+                        setAndroidImage(location - 1);
+                    } else androidPlays();
+                }
+            } else board.setGameOver(true);
         }
     }
 
@@ -204,8 +207,8 @@ class GameMechanics {
         board.playerChoicesInitializer();
         board.notTappedInitializer();
 
-        if(isGameOver) {
-            isGameOver = false;
+        if(board.isGameOver()) {
+            board.setGameOver(false);
             if(winnerPlayer == Board.Player.TWO) {
                 board.setCurrentPlayer(Board.Player.TWO);
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
@@ -225,7 +228,15 @@ class GameMechanics {
         } else {
             board.setCurrentPlayer(Board.Player.ONE);
         }
-        yourTurn = true;
+
+        if(!yourTurn) {
+            Log.d(TAG, "resetTheGame: " + board.getCurrentPlayer());
+            yourTurn = true;
+            if(board.getCurrentPlayer() == Board.Player.ONE && isOnePlayerGame) {
+                Log.d(TAG, "resetTheGame: ok");
+                androidPlays();
+            }
+        }
     }
 
     int getPlayerOneScore() {

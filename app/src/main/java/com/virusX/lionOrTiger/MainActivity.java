@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         binding.gameTypeRGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                gameMechanics.resetTheGame();
+                saveScore();
                 switch (checkedId) {
                     case R.id.onePlayerRBtn:
                         binding.gameStrengthRGrp.setVisibility(View.VISIBLE);
@@ -54,15 +56,14 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                gameMechanics.resetTheGame();
                 Log.d(TAG, "Game Type Chosen");
-                saveScore();
             }
         });
 
         binding.gameStrengthRGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                gameMechanics.resetTheGame();
                 switch (checkedId) {
                     case R.id.easyRBtn:
                         strength = 1;
@@ -76,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                gameMechanics.resetTheGame();
             }
         });
 

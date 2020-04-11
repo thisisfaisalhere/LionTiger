@@ -16,7 +16,7 @@ class ExpertGamePlay {
         this.b = b;
     }
 
-    private int evaluate(int depth)
+    private int evaluate()
     {
         for (int row = 0; row < 3; row++)
         {
@@ -24,9 +24,9 @@ class ExpertGamePlay {
                     b[row][1] == b[row][2])
             {
                 if (b[row][0] == player)
-                    return +10 - depth;
+                    return +10;
                 else if (b[row][0] == AI)
-                    return -10 + depth;
+                    return -10;
             }
         }
         for (int col = 0; col < 3; col++)
@@ -35,36 +35,36 @@ class ExpertGamePlay {
                     b[1][col] == b[2][col])
             {
                 if (b[0][col] == player)
-                    return +10 - depth;
+                    return +10;
 
                 else if (b[0][col] == AI)
-                    return -10 + depth;
+                    return -10;
             }
         }
         if (b[0][0] == b[1][1] && b[1][1] == b[2][2])
         {
             if (b[0][0] == player)
-                return +10 - depth;
+                return +10;
             else if (b[0][0] == AI)
-                return -10 + depth;
+                return -10;
         }
         if (b[0][2] == b[1][1] && b[1][1] == b[2][0])
         {
             if (b[0][2] == player)
-                return +10 - depth;
+                return +10;
             else if (b[0][2] == AI)
-                return -10 + depth;
+                return -10;
         }
         return 0;
     }
 
     private int miniMax(int depth, Boolean isMax)
     {
-        int score = evaluate(depth);
+        int score = evaluate();
         if (score == 10)
-            return score;
+            return score - depth;
         if (score == -10)
-            return score;
+            return score + depth;
         if (board.isSpaceAvailable())
             return 0;
         if (isMax)
@@ -116,7 +116,7 @@ class ExpertGamePlay {
                 if (b[i][j] == Board.Player.INPUT)
                 {
                     b[i][j] = player;
-                    int moveVal = miniMax(0, false);
+                    int moveVal = miniMax(0, true);
                     b[i][j] = Board.Player.INPUT;
                     if (moveVal > bestVal)
                     {
