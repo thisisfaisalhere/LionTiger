@@ -1,6 +1,6 @@
 package com.virusX.lionOrTiger;
 
-class ModerateGamePlay {
+class ExpertGamePlay {
 
     private Board.Player player = Board.Player.ONE, AI = Board.Player.TWO;
     private Board board;
@@ -11,12 +11,12 @@ class ModerateGamePlay {
         int row, col;
     }
 
-    ModerateGamePlay(Board board, Board.Player[][] b) {
+    ExpertGamePlay(Board board, Board.Player[][] b) {
         this.board = board;
         this.b = b;
     }
 
-    private int evaluate()
+    private int evaluate(int depth)
     {
         for (int row = 0; row < 3; row++)
         {
@@ -24,9 +24,9 @@ class ModerateGamePlay {
                     b[row][1] == b[row][2])
             {
                 if (b[row][0] == player)
-                    return +10;
+                    return +10 - depth;
                 else if (b[row][0] == AI)
-                    return -10;
+                    return -10 + depth;
             }
         }
         for (int col = 0; col < 3; col++)
@@ -35,32 +35,32 @@ class ModerateGamePlay {
                     b[1][col] == b[2][col])
             {
                 if (b[0][col] == player)
-                    return +10;
+                    return +10 - depth;
 
                 else if (b[0][col] == AI)
-                    return -10;
+                    return -10 + depth;
             }
         }
         if (b[0][0] == b[1][1] && b[1][1] == b[2][2])
         {
             if (b[0][0] == player)
-                return +10;
+                return +10 - depth;
             else if (b[0][0] == AI)
-                return -10;
+                return -10 + depth;
         }
         if (b[0][2] == b[1][1] && b[1][1] == b[2][0])
         {
             if (b[0][2] == player)
-                return +10;
+                return +10 - depth;
             else if (b[0][2] == AI)
-                return -10;
+                return -10 + depth;
         }
         return 0;
     }
 
     private int miniMax(int depth, Boolean isMax)
     {
-        int score = evaluate();
+        int score = evaluate(depth);
         if (score == 10)
             return score;
         if (score == -10)
