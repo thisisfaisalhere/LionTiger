@@ -18,13 +18,11 @@ class AIPlays {
         } else if(strength == 2) {
             ModerateGamePlay moderateGamePlay = new ModerateGamePlay(board, b);
             ModerateGamePlay.Move move = moderateGamePlay.findBestMove();
-            int location = (move.row * 3) + move.col;
-            return location + 1;
+            return ((move.row * 3) + move.col) + 1;
         } else if(strength == 3) {
             ExpertGamePlay expertGamePlay = new ExpertGamePlay(board, b);
             ExpertGamePlay.Move move = expertGamePlay.findBestMove();
-            int location = (move.row * 3) + move.col;
-            return location + 1;
+            return ((move.row * 3) + move.col) + 1;
         }
         return -1;
     }

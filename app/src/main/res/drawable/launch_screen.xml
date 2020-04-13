@@ -9,5 +9,4 @@
             android:src="@drawable/lion"
             android:gravity="center"/>
     </item>
-
 </layer-list>

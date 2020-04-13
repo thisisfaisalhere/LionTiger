@@ -1,6 +1,7 @@
 package com.virusX.lionOrTiger;
 
 import android.util.Log;
+
 import java.util.Arrays;
 
 class Board {
@@ -20,21 +21,6 @@ class Board {
             {true, true, true,
                     true, true, true,
                     true, true, true};
-
-    private boolean gameOver = false;
-
-    Player[][] boardState() {
-        Board.Player[] playerChoices = getPlayerChoices();
-        Board.Player[][] b = new Board.Player[3][3];
-        for (int i = 0; i < 3; i++) {
-            int j = 0;
-            while (j < 3) {
-                b[i][j] = playerChoices[((i * 3) + j)];
-                j++;
-            }
-        }
-        return b;
-    }
 
     void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -64,14 +50,6 @@ class Board {
         return notTapped[position];
     }
 
-    boolean isGameOver() {
-        return gameOver;
-    }
-
-    void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
     void playerChoicesInitializer() {
         Arrays.fill(playerChoices, Player.INPUT);
     }
@@ -87,22 +65,17 @@ class Board {
         }
         return false;
     }
-//
-//    Board getDeepCopy() {
-//        Board board = new Board();
-//        board.notTapped = this.notTapped;
-//        board.playerChoices = this.playerChoices;
-//        board.currentPlayer = this.currentPlayer;
-//        board.gameOver = this.gameOver;
-//        return board;
-//    }
-//
-//    ArrayList<Integer> getAvailableMoves() {
-//        ArrayList<Integer> availableMoves = new ArrayList<>();
-//        for(int i = 0; i < playerChoices.length; i++) {
-//            if(playerChoices[i] == Player.INPUT)
-//                availableMoves.add(i);
-//        }
-//        return availableMoves;
-//    }
+
+    Player[][] boardState() {
+        Player[] choices = getPlayerChoices();
+        Player[][] b = new Player[3][3];
+        for (int i = 0; i < 3; i++) {
+            int j = 0;
+            while (j < 3) {
+                b[i][j] = choices[((i * 3) + j)];
+                j++;
+            }
+        }
+        return b;
+    }
 }
