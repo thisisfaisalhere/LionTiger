@@ -45,7 +45,7 @@ class GameMechanics {
                     setImage(tappedImgView);
                     Log.d(TAG, tag - 1 + "");
                 } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
-            } else Toasty.warning(context, "Slow down Bud", Toasty.LENGTH_SHORT, true).show();
+            } else Toasty.warning(context, "Wait for your Turn", Toasty.LENGTH_SHORT, true).show();
         } else Toasty.warning(context, "Game Over. Reset to Play Again", Toasty.LENGTH_SHORT, true).show();
     }
 
