@@ -22,7 +22,12 @@ class GameMechanics {
     private boolean isOnePlayerGame, yourTurn = true;
     private int tag, firstPlayerImg, secondPlayerImg, playerOneScore, playerTwoScore, strength;
     private Board.Player winnerPlayer;
-    private final String TAG = "LionTiger";
+    private static final String TAG = "LionTiger";
+
+    private int[][] winCases =
+            {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
+                    {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+                    {0, 4, 8}, {2, 4, 6}};
 
     GameMechanics(ActivityMainBinding binding, Context context) {
         this.binding = binding;
@@ -90,25 +95,35 @@ class GameMechanics {
         tappedImg.setImageResource(img);
         tappedImg.setTranslationX(translationValue);
         tappedImg.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
-        if(!board.isSpaceAvailable())
+        if(!board.isSpaceAvailable() && winnerPlayer == null)
             drawMessage();
     }
 
     private void checkWinner() {
-        winnerPlayer = board.checkWinner();
-        int winner;
-        String message;
-        if(winnerPlayer == Board.Player.ONE) {
-            Log.d(TAG, "checkWinner: player one winner");
-            winner = secondPlayerImg;
-            message = "Lion is our Winner";
-            if(isOnePlayerGame) message = "android is our Winner";
-        } else {
-            Log.d(TAG, "checkWinner: player one winner");
-            winner = firstPlayerImg;
-            message = "Tiger is our Winner";
+        Board.Player[] choicesByPlayer = board.getPlayerChoices();
+        for(int[] winCase : winCases) {
+            if(choicesByPlayer[winCase[0]] == choicesByPlayer[winCase[1]]
+                    && choicesByPlayer[winCase[1]] == choicesByPlayer[winCase[2]]
+                    && choicesByPlayer[winCase[0]] != Board.Player.INPUT) {
+                int winner;
+                String message;
+                if(board.getCurrentPlayer() == Board.Player.ONE) {
+                    Log.d(TAG, "checkWinner: player one winner");
+                    winner = secondPlayerImg;
+                    winnerPlayer = Board.Player.TWO;
+                    message = "Lion is our Winner";
+                    if(isOnePlayerGame) message = "android is our Winner";
+                } else {
+                    Log.d(TAG, "checkWinner: player one winner");
+                    winner = firstPlayerImg;
+                    winnerPlayer = Board.Player.ONE;
+                    message = "Tiger is our Winner";
+                }
+                showMessage(winner, message);
+                board.setGameOver(true);
+                break;
+            }
         }
-        showMessage(winner, message);
     }
 
     private void androidPlays() {
@@ -173,7 +188,7 @@ class GameMechanics {
         binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
         yourTurn = true;
-        if(!board.isSpaceAvailable())
+        if(!board.isSpaceAvailable() && winnerPlayer == null)
             drawMessage();
     }
 
@@ -195,7 +210,7 @@ class GameMechanics {
 
     private void drawMessage() {
         final PrettyDialog prettyDialog = new PrettyDialog(context);
-        prettyDialog.setIcon(R.drawable.ic_warning).setTitle("It's a Draw. Rest to Play Again")
+        prettyDialog.setIcon(R.drawable.ic_warning).setTitle("It's a Draw. Reset to Play Again")
                 .addButton("Reset Game",
                         R.color.pdlg_color_white,
                         R.color.pdlg_color_green,
@@ -235,13 +250,11 @@ class GameMechanics {
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerOneScore++;
             }
+            winnerPlayer = null;
             binding.scorePlayerOne.setText(Integer.toString(playerOneScore));
             binding.scorePlayerTwo.setText(Integer.toString(playerTwoScore));
         } else {
-            if(board.getCurrentPlayer() == Board.Player.ONE)
-                board.setCurrentPlayer(Board.Player.TWO);
-            else
-                board.setCurrentPlayer(Board.Player.ONE);
+            board.setCurrentPlayer(Board.Player.ONE);
             binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
             binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         }

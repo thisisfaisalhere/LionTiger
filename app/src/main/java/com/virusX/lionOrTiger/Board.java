@@ -12,11 +12,6 @@ class Board {
     private Player currentPlayer;
     private Player[] playerChoices = new Player[9];
 
-    private int[][] winCases =
-            {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
-                    {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
-                    {0, 4, 8}, {2, 4, 6}};
-
     private boolean[] notTapped =
             {true, true, true,
                     true, true, true,
@@ -47,26 +42,8 @@ class Board {
         return currentPlayer;
     }
 
-    private Player[] getPlayerChoices() {
+    Player[] getPlayerChoices() {
         return playerChoices;
-    }
-
-    Player checkWinner() {
-        Player winnerPlayer = null;
-        for(int[] winCase : winCases) {
-            if(playerChoices[winCase[0]] == playerChoices[winCase[1]]
-                    && playerChoices[winCase[1]] == playerChoices[winCase[2]]
-                    && playerChoices[winCase[0]] != Board.Player.INPUT) {
-                if(getCurrentPlayer() == Board.Player.ONE) {
-                    winnerPlayer = Board.Player.TWO;
-                } else {
-                    winnerPlayer = Board.Player.ONE;
-                }
-                isGameOver = true;
-                break;
-            }
-        }
-        return winnerPlayer;
     }
 
     boolean getNotTapped(int position) {
