@@ -21,6 +21,7 @@ class Board {
             {true, true, true,
                     true, true, true,
                     true, true, true};
+    private boolean isGameOver;
 
     void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -34,16 +35,38 @@ class Board {
         notTapped[position] = false;
     }
 
+    boolean isGameOver() {
+        return isGameOver;
+    }
+
+    void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
     Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    Player[] getPlayerChoices() {
+    private Player[] getPlayerChoices() {
         return playerChoices;
     }
 
-    int[][] getWinCases() {
-        return winCases;
+    Player checkWinner() {
+        Player winnerPlayer = null;
+        for(int[] winCase : winCases) {
+            if(playerChoices[winCase[0]] == playerChoices[winCase[1]]
+                    && playerChoices[winCase[1]] == playerChoices[winCase[2]]
+                    && playerChoices[winCase[0]] != Board.Player.INPUT) {
+                if(getCurrentPlayer() == Board.Player.ONE) {
+                    winnerPlayer = Board.Player.TWO;
+                } else {
+                    winnerPlayer = Board.Player.ONE;
+                }
+                isGameOver = true;
+                break;
+            }
+        }
+        return winnerPlayer;
     }
 
     boolean getNotTapped(int position) {
