@@ -1,6 +1,7 @@
 package com.virusX.lionOrTiger;
 
 import android.app.Application;
+
 import com.parse.Parse;
 
 public class App extends Application {

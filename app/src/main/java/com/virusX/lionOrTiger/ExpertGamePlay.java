@@ -32,12 +32,14 @@ class ExpertGamePlay {
                 else if (b[0][col] == AI)
                     return -10;
             }
-        } if (b[0][0] == b[1][1] && b[1][1] == b[2][2]) {
+        }
+        if (b[0][0] == b[1][1] && b[1][1] == b[2][2]) {
             if (b[0][0] == player)
                 return +10;
             else if (b[0][0] == AI)
                 return -10;
-        } if (b[0][2] == b[1][1] && b[1][1] == b[2][0]) {
+        }
+        if (b[0][2] == b[1][1] && b[1][1] == b[2][0]) {
             if (b[0][2] == player)
                 return +10;
             else if (b[0][2] == AI)
@@ -58,7 +60,7 @@ class ExpertGamePlay {
             int best = -1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (b[i][j]== Board.Player.INPUT) {
+                    if (b[i][j] == Board.Player.INPUT) {
                         b[i][j] = player;
                         best = Math.max(best, miniMax(depth + 1, false));
                         b[i][j] = Board.Player.INPUT;
@@ -66,9 +68,7 @@ class ExpertGamePlay {
                 }
             }
             return best;
-        }
-        else
-        {
+        } else {
             int best = 1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {

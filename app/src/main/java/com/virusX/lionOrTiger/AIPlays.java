@@ -12,14 +12,14 @@ class AIPlays {
 
     int getLocation(int strength) {
         Board.Player[][] b = board.boardState();
-        if(strength == 1) {
+        if (strength == 1) {
             Random random = new Random();
             return random.nextInt(9) + 1;
-        } else if(strength == 2) {
+        } else if (strength == 2) {
             ModerateGamePlay moderateGamePlay = new ModerateGamePlay(board, b);
             ModerateGamePlay.Move move = moderateGamePlay.findBestMove();
             return ((move.row * 3) + move.col) + 1;
-        } else if(strength == 3) {
+        } else if (strength == 3) {
             ExpertGamePlay expertGamePlay = new ExpertGamePlay(board, b);
             ExpertGamePlay.Move move = expertGamePlay.findBestMove();
             return ((move.row * 3) + move.col) + 1;

@@ -41,25 +41,26 @@ class GameMechanics {
     void run(ImageView tappedImgView, boolean isOnePlayerGame, int strength) {
         this.isOnePlayerGame = isOnePlayerGame;
         this.strength = strength;
-        if(!isOnePlayerGame) yourTurn = true;
+        if (!isOnePlayerGame) yourTurn = true;
         if (!board.isGameOver()) {
-            if(yourTurn) {
+            if (yourTurn) {
                 tag = Integer.parseInt(tappedImgView.getTag().toString());
                 if (board.getNotTapped(tag - 1)) {
                     board.setPlayerChoice(board.getCurrentPlayer(), tag - 1);
                     setImage(tappedImgView);
                     Log.d(TAG, tag - 1 + "");
-                } else Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
+                } else
+                    Toasty.info(context, "Choose another Grid", Toasty.LENGTH_SHORT, true).show();
             } else Toasty.warning(context, "Wait for your Turn", Toasty.LENGTH_SHORT, true).show();
-        } else Toasty.warning(context, "Game Over. Reset to Play Again", Toasty.LENGTH_SHORT, true).show();
+        } else
+            Toasty.warning(context, "Game Over. Reset to Play Again", Toasty.LENGTH_SHORT, true).show();
     }
-
 
 
     private void setImage(ImageView tappedImg) {
         board.setNotTapped(tag - 1);
         int translationValue = 0, translationXByValue = 0, img = 0;
-        if(board.getCurrentPlayer() == Board.Player.ONE) {
+        if (board.getCurrentPlayer() == Board.Player.ONE) {
             img = firstPlayerImg;
             board.setCurrentPlayer(Board.Player.TWO);
             translationValue = -2000;
@@ -70,7 +71,7 @@ class GameMechanics {
                     .getColor(context, R.color.imageBackgroundColor));
             Log.d(TAG, "setImage: checking winner in player one");
             checkWinner();
-            if(isOnePlayerGame) {
+            if (isOnePlayerGame) {
                 yourTurn = false;
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -80,7 +81,7 @@ class GameMechanics {
                     }
                 }, 350);
             }
-        } else if(board.getCurrentPlayer() == Board.Player.TWO) {
+        } else if (board.getCurrentPlayer() == Board.Player.TWO) {
             img = secondPlayerImg;
             board.setCurrentPlayer(Board.Player.ONE);
             translationValue = 2000;
@@ -95,24 +96,24 @@ class GameMechanics {
         tappedImg.setImageResource(img);
         tappedImg.setTranslationX(translationValue);
         tappedImg.animate().translationXBy(translationXByValue).alpha(1).setDuration(500);
-        if(!board.isSpaceAvailable() && winnerPlayer == null)
+        if (!board.isSpaceAvailable() && winnerPlayer == null)
             drawMessage();
     }
 
     private void checkWinner() {
         Board.Player[] choicesByPlayer = board.getPlayerChoices();
-        for(int[] winCase : winCases) {
-            if(choicesByPlayer[winCase[0]] == choicesByPlayer[winCase[1]]
+        for (int[] winCase : winCases) {
+            if (choicesByPlayer[winCase[0]] == choicesByPlayer[winCase[1]]
                     && choicesByPlayer[winCase[1]] == choicesByPlayer[winCase[2]]
                     && choicesByPlayer[winCase[0]] != Board.Player.INPUT) {
                 int winner;
                 String message;
-                if(board.getCurrentPlayer() == Board.Player.ONE) {
+                if (board.getCurrentPlayer() == Board.Player.ONE) {
                     Log.d(TAG, "checkWinner: player one winner");
                     winner = secondPlayerImg;
                     winnerPlayer = Board.Player.TWO;
                     message = "Lion is our Winner";
-                    if(isOnePlayerGame) message = "android is our Winner";
+                    if (isOnePlayerGame) message = "android is our Winner";
                 } else {
                     Log.d(TAG, "checkWinner: player one winner");
                     winner = firstPlayerImg;
@@ -128,7 +129,7 @@ class GameMechanics {
 
     private void androidPlays() {
         if (!board.isGameOver()) {
-            if(board.isSpaceAvailable()) {
+            if (board.isSpaceAvailable()) {
                 AIPlays aiPlays = new AIPlays(board);
                 int location = aiPlays.getLocation(strength);
                 if (board.getNotTapped(location - 1)) {
@@ -188,7 +189,7 @@ class GameMechanics {
         binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
         yourTurn = true;
-        if(!board.isSpaceAvailable() && winnerPlayer == null)
+        if (!board.isSpaceAvailable() && winnerPlayer == null)
             drawMessage();
     }
 
@@ -226,7 +227,7 @@ class GameMechanics {
 
     @SuppressLint("SetTextI18n")
     void resetTheGame() {
-        for(int i = 0; i < binding.grid.getChildCount(); i++) {
+        for (int i = 0; i < binding.grid.getChildCount(); i++) {
             ImageView imageView = (ImageView) binding.grid.getChildAt(i);
             imageView.setImageDrawable(null);
             imageView.setAlpha(0.2f);
@@ -234,14 +235,14 @@ class GameMechanics {
         board.playerChoicesInitializer();
         board.notTappedInitializer();
 
-        if(board.isGameOver()) {
+        if (board.isGameOver()) {
             board.setGameOver(false);
-            if(winnerPlayer == Board.Player.TWO) {
+            if (winnerPlayer == Board.Player.TWO) {
                 board.setCurrentPlayer(Board.Player.TWO);
                 binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.rootLayoutColor));
                 binding.secondPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
                 playerTwoScore++;
-                if(isOnePlayerGame) {
+                if (isOnePlayerGame) {
                     androidPlays();
                 }
             } else {
@@ -259,10 +260,10 @@ class GameMechanics {
             binding.firstPlayerImg.setBackgroundColor(ContextCompat.getColor(context, R.color.imageBackgroundColor));
         }
 
-        if(!yourTurn) {
+        if (!yourTurn) {
             Log.d(TAG, "resetTheGame: " + board.getCurrentPlayer());
             yourTurn = true;
-            if(board.getCurrentPlayer() == Board.Player.ONE && isOnePlayerGame) {
+            if (board.getCurrentPlayer() == Board.Player.ONE && isOnePlayerGame) {
                 Log.d(TAG, "resetTheGame: ok");
                 androidPlays();
             }

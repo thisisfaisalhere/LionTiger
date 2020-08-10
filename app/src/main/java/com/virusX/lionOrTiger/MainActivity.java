@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(binding.twoPlayerRBtn.isChecked()) {
+        if (binding.twoPlayerRBtn.isChecked()) {
             initTwoPlayerGame();
         }
     }

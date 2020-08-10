@@ -60,7 +60,7 @@ class ModerateGamePlay {
             int best = -1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (b[i][j]== Board.Player.INPUT) {
+                    if (b[i][j] == Board.Player.INPUT) {
                         b[i][j] = player;
                         best = Math.max(best, miniMax(depth + 1, false));
                         b[i][j] = Board.Player.INPUT;
@@ -68,8 +68,7 @@ class ModerateGamePlay {
                 }
             }
             return best;
-        }
-        else {
+        } else {
             int best = 1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {

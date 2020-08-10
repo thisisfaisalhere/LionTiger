@@ -9,6 +9,7 @@ class Board {
     enum Player {
         ONE, TWO, INPUT
     }
+
     private Player currentPlayer;
     private Player[] playerChoices = new Player[9];
 
@@ -59,7 +60,7 @@ class Board {
     }
 
     boolean isSpaceAvailable() {
-        Log.i("LionOrTiger" ,"isSpaceAvailable() called");
+        Log.i("LionOrTiger", "isSpaceAvailable() called");
         for (boolean b : notTapped) {
             if (b) return true;
         }
